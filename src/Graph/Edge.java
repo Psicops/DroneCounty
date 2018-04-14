@@ -1,5 +1,10 @@
 package Graph;
 
+/**
+ *
+ * @author †Psicops†
+ */
+
 public class Edge{
     
   public final Vertex TARGET;

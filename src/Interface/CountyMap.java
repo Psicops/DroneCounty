@@ -1,13 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Interface;
 
-import java.awt.Image;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import java.awt.Graphics;
 
 /**
  *
@@ -17,6 +10,7 @@ public class CountyMap extends javax.swing.JFrame {
 
     public CountyMap() {
         initComponents();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -53,6 +47,8 @@ public class CountyMap extends javax.swing.JFrame {
         NodePercent = new javax.swing.JButton();
         NodeAnd = new javax.swing.JButton();
         NodeDollar = new javax.swing.JButton();
+        bReturn = new javax.swing.JButton();
+        bShowTracks = new javax.swing.JButton();
         Map = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -302,6 +298,24 @@ public class CountyMap extends javax.swing.JFrame {
         });
         getContentPane().add(NodeDollar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 40, -1, 30));
 
+        bReturn.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        bReturn.setText("Set Up");
+        bReturn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bReturnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bReturn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 90, 30));
+
+        bShowTracks.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        bShowTracks.setText("Show Tracks");
+        bShowTracks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bShowTracksActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bShowTracks, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
+
         Map.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Map.jpg"))); // NOI18N
         Map.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(Map, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -429,6 +443,21 @@ public class CountyMap extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_NodeDollarActionPerformed
 
+    private void bReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bReturnActionPerformed
+        SetUp setp = new SetUp();
+        setp.show();
+        this.dispose();
+    }//GEN-LAST:event_bReturnActionPerformed
+
+    private void bShowTracksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bShowTracksActionPerformed
+        Graphics graphics = this.getGraphics();
+        graphics.drawLine(NodeA.getX()+25, NodeA.getY()+45, NodeB.getX()+25, NodeB.getY()+50);
+        graphics.drawLine(NodeA.getX()+25, NodeA.getY()+45, NodeC.getX()+25, NodeC.getY()+50);
+        graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeC.getX()+25, NodeC.getY()+50);
+        graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeH.getX()+25, NodeH.getY()+50);
+        graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeS.getX()+25, NodeS.getY()+50);
+    }//GEN-LAST:event_bShowTracksActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -496,5 +525,7 @@ public class CountyMap extends javax.swing.JFrame {
     private javax.swing.JButton NodeX;
     private javax.swing.JButton NodeY;
     private javax.swing.JButton NodeZ;
+    private javax.swing.JButton bReturn;
+    private javax.swing.JButton bShowTracks;
     // End of variables declaration//GEN-END:variables
 }

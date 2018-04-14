@@ -1,5 +1,10 @@
 package Graph;
 
+/**
+ *
+ * @author †Psicops†
+ */
+
 import java.util.*;
 
 public class Graph {

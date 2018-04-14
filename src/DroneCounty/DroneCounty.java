@@ -1,14 +1,46 @@
 package DroneCounty;
 
+/**
+ *
+ * @author †Psicops†
+ */
+
 import Graph.Graph;
+import Interface.SetUp;
 
 public class DroneCounty {
 
     public static void main(String[] args) {
         
+         /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(SetUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(SetUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(SetUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(SetUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        
+        SetUp setup = new SetUp();
+        setup.show();
+        
         Graph myGraph = new Graph(9);
 
-        myGraph.addEdge(0, 1, 4); myGraph.addEdge(0, 7, 8); myGraph.addEdge(1, 2, 8); 
+        /*myGraph.addEdge(0, 1, 4); myGraph.addEdge(0, 7, 8); myGraph.addEdge(1, 2, 8); 
         myGraph.addEdge(1, 7, 11); myGraph.addEdge(2, 1, 8); myGraph.addEdge(2, 8, 2); 
         myGraph.addEdge(2, 5, 4); myGraph.addEdge(2, 3, 7); myGraph.addEdge(3, 2, 7); 
         myGraph.addEdge(3, 5, 14); myGraph.addEdge(3, 4, 9); myGraph.addEdge(4, 3, 9); 
@@ -20,7 +52,7 @@ public class DroneCounty {
         
         myGraph.calculate(myGraph.getVertex(2));
         
-        myGraph.printMinimumDistance();
+        myGraph.printMinimumDistance();*/
         
     }
     
