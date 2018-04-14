@@ -1,19 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Interface;
 
-/**
- *
- * @author †Psicops†
- */
+import javax.swing.JOptionPane;
+
 public class SetUp extends javax.swing.JFrame {
 
-    /**
-     * Creates new form SetUp
-     */
     public SetUp() {
         initComponents();
     }
@@ -46,29 +36,35 @@ public class SetUp extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Drone County");
-        setMaximumSize(new java.awt.Dimension(400, 270));
-        setMinimumSize(new java.awt.Dimension(400, 270));
-        setPreferredSize(new java.awt.Dimension(400, 270));
+        setMaximumSize(new java.awt.Dimension(400, 330));
+        setMinimumSize(new java.awt.Dimension(400, 330));
+        setPreferredSize(new java.awt.Dimension(400, 330));
         setResizable(false);
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/DroneCounty.jpg"))); // NOI18N
 
         lblWidth.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        lblWidth.setText("Tracks Width: ");
+        lblWidth.setText("Tracks Width (km): ");
 
         lblHeight.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        lblHeight.setText("Tracks Height:");
+        lblHeight.setText("Tracks Height (km):");
 
-        tfWidth.setMaximumSize(new java.awt.Dimension(5, 20));
-        tfWidth.setMinimumSize(new java.awt.Dimension(5, 20));
-        tfWidth.setPreferredSize(new java.awt.Dimension(5, 20));
+        tfWidth.setMaximumSize(new java.awt.Dimension(6, 20));
+        tfWidth.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfWidthKeyTyped(evt);
+            }
+        });
 
-        tfHeight.setMaximumSize(new java.awt.Dimension(5, 20));
-        tfHeight.setMinimumSize(new java.awt.Dimension(5, 20));
-        tfHeight.setPreferredSize(new java.awt.Dimension(5, 20));
+        tfHeight.setMaximumSize(new java.awt.Dimension(6, 20));
         tfHeight.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfHeightActionPerformed(evt);
+            }
+        });
+        tfHeight.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfHeightKeyTyped(evt);
             }
         });
 
@@ -76,27 +72,49 @@ public class SetUp extends javax.swing.JFrame {
         lblNumberTravels.setText("Number of Travels:");
 
         lblTime.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        lblTime.setText("Time:");
+        lblTime.setText("Time (s):");
 
-        tfTime.setMaximumSize(new java.awt.Dimension(5, 20));
-        tfTime.setMinimumSize(new java.awt.Dimension(5, 20));
-        tfTime.setPreferredSize(new java.awt.Dimension(5, 20));
+        tfTime.setMaximumSize(new java.awt.Dimension(6, 20));
+        tfTime.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfTimeKeyTyped(evt);
+            }
+        });
+
+        tfNumberTravels.setMaximumSize(new java.awt.Dimension(6, 20));
+        tfNumberTravels.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfNumberTravelsKeyTyped(evt);
+            }
+        });
 
         lblNumberStations.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         lblNumberStations.setText("Number of Stations:");
 
+        tfNumberTracks.setMaximumSize(new java.awt.Dimension(6, 20));
         tfNumberTracks.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfNumberTracksActionPerformed(evt);
+            }
+        });
+        tfNumberTracks.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfNumberTracksKeyTyped(evt);
             }
         });
 
         lblNumberTracks.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         lblNumberTracks.setText("Number of Tracks:");
 
+        tfNumberStations.setMaximumSize(new java.awt.Dimension(6, 20));
         tfNumberStations.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfNumberStationsActionPerformed(evt);
+            }
+        });
+        tfNumberStations.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfNumberStationsKeyTyped(evt);
             }
         });
 
@@ -121,45 +139,46 @@ public class SetUp extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblHeight)
+                                .addGap(18, 18, 18)
+                                .addComponent(tfWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblWidth)
+                                .addGap(18, 18, 18)
+                                .addComponent(tfHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addComponent(lblNumberTravels)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tfNumberTravels, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(lblNumberTracks)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(28, 28, 28)
                         .addComponent(tfNumberTracks, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
+                        .addGap(18, 18, 18)
                         .addComponent(lblNumberStations)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(tfNumberStations, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(159, 159, 159)
                         .addComponent(bReady))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblWidth)
-                            .addComponent(lblHeight))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tfHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(25, 25, 25)
-                                .addComponent(lblNumberTravels)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfNumberTravels, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tfWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(63, 63, 63)
-                                .addComponent(lblTime))))
+                        .addContainerGap()
+                        .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(96, 96, 96)
                         .addComponent(lblAlgorithm)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbAlgorithm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbAlgorithm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblTime)
+                                .addGap(68, 68, 68)
+                                .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,27 +194,28 @@ public class SetUp extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblWidth)
-                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(tfWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblHeight)))
+                            .addComponent(tfTime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tfWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblHeight)))
+                            .addComponent(lblAlgorithm)
+                            .addComponent(cbAlgorithm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(bReady))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblNumberTravels, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tfNumberTravels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tfHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblWidth))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblTime)
-                            .addComponent(tfTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAlgorithm)
-                    .addComponent(cbAlgorithm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(bReady)
-                .addContainerGap(14, Short.MAX_VALUE))
+                        .addComponent(lblTime)))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
 
         pack();
@@ -214,8 +234,84 @@ public class SetUp extends javax.swing.JFrame {
     }//GEN-LAST:event_tfNumberStationsActionPerformed
 
     private void bReadyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bReadyActionPerformed
-        // TODO add your handling code here:
+        String setup[] = new String[7];
+        if(tfNumberTracks.getText().equals(""))
+            setup[0] = "2";
+        else if(Integer.parseInt(tfNumberTracks.getText()) > Integer.parseInt(tfNumberStations.getText()) - 1){
+            JOptionPane.showMessageDialog(null, "You can only choose a number from 1 to "
+                    +(Integer.parseInt(tfNumberStations.getText())-1)+".\n "
+                    +(Integer.parseInt(tfNumberStations.getText())-1)+" tracks selected.");
+            setup[0] = Integer.parseInt(tfNumberStations.getText())-1 + "";
+        }else if(Integer.parseInt(tfNumberTracks.getText()) < 1){
+            JOptionPane.showMessageDialog(null, "You can only choose a number from 1 to "
+                    +(Integer.parseInt(tfNumberStations.getText())-1)+".\n 1 track selected.");
+            setup[0] = "1";
+        }else
+            setup[0] = tfNumberTracks.getText();
+        if(tfWidth.getText().equals(""))
+            setup[1] = "1";
+        else
+            setup[1] = tfWidth.getText();
+        if(tfHeight.getText().equals(""))
+            setup[2] = "1";
+        else
+            setup[2] = tfHeight.getText();
+        if(tfNumberStations.getText().equals(""))
+            setup[3] = "2";
+        else if(Integer.parseInt(tfNumberStations.getText()) > 30){
+            JOptionPane.showMessageDialog(null, "You can only choose a number from 2 to 30.\n30 stations selected.");
+            setup[3] = "30";
+        }else if(Integer.parseInt(tfNumberStations.getText()) < 2){
+            JOptionPane.showMessageDialog(null, "You can only choose a number from 2 to 30.\n 2 stations selected.");
+            setup[3] = "2";
+        }else
+            setup[3] = tfNumberStations.getText();
+        if(tfNumberTravels.getText().equals(""))
+            setup[4] = "100";
+        else
+            setup[4] = tfNumberTravels.getText();
+        if(tfTime.getText().equals(""))
+            setup[5] = "10";
+        else
+            setup[5] = tfTime.getText();
+        setup[6] = cbAlgorithm.getSelectedItem().toString();
     }//GEN-LAST:event_bReadyActionPerformed
+
+    private void tfNumberTracksKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNumberTracksKeyTyped
+        char character = evt.getKeyChar();
+        if(character <'0'|| character > '9')
+            evt.consume();
+    }//GEN-LAST:event_tfNumberTracksKeyTyped
+
+    private void tfHeightKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfHeightKeyTyped
+        char character = evt.getKeyChar();
+        if(character <'0'|| character > '9')
+            evt.consume();
+    }//GEN-LAST:event_tfHeightKeyTyped
+
+    private void tfWidthKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfWidthKeyTyped
+        char character = evt.getKeyChar();
+        if(character <'0'|| character > '9')
+            evt.consume();
+    }//GEN-LAST:event_tfWidthKeyTyped
+
+    private void tfNumberStationsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNumberStationsKeyTyped
+        char character = evt.getKeyChar();
+        if(character <'0'|| character > '9')
+            evt.consume();
+    }//GEN-LAST:event_tfNumberStationsKeyTyped
+
+    private void tfNumberTravelsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNumberTravelsKeyTyped
+        char character = evt.getKeyChar();
+        if(character <'0'|| character > '9')
+            evt.consume();
+    }//GEN-LAST:event_tfNumberTravelsKeyTyped
+
+    private void tfTimeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfTimeKeyTyped
+        char character = evt.getKeyChar();
+        if(character <'0'|| character > '9')
+            evt.consume();
+    }//GEN-LAST:event_tfTimeKeyTyped
 
     /**
      * @param args the command line arguments

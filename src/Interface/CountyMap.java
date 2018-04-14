@@ -59,7 +59,6 @@ public class CountyMap extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         setMaximumSize(new java.awt.Dimension(1200, 750));
         setMinimumSize(new java.awt.Dimension(1200, 750));
-        setPreferredSize(new java.awt.Dimension(1200, 750));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -305,8 +304,6 @@ public class CountyMap extends javax.swing.JFrame {
 
         Map.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Map.jpg"))); // NOI18N
         Map.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        Map.setMaximumSize(new java.awt.Dimension(1200, 750));
-        Map.setMinimumSize(new java.awt.Dimension(1200, 750));
         getContentPane().add(Map, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
