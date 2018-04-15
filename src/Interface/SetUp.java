@@ -244,16 +244,26 @@ public class SetUp extends javax.swing.JFrame {
     }//GEN-LAST:event_tfNumberStationsActionPerformed
 
     private void bReadyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bReadyActionPerformed
+        if(tfNumberStations.getText().equals(""))
+            DroneCounty.SET_UP_PARAM[3] = "2";
+        else if(Integer.parseInt(tfNumberStations.getText()) > 30){
+            JOptionPane.showMessageDialog(null, "You can only choose a number of Stations from 2 to 30.\n30 stations selected.");
+            DroneCounty.SET_UP_PARAM[3] = "30";
+        }else if(Integer.parseInt(tfNumberStations.getText()) < 2){
+            JOptionPane.showMessageDialog(null, "You can only choose a number of Stations from 2 to 30.\n 2 stations selected.");
+            DroneCounty.SET_UP_PARAM[3] = "2";
+        }else
+            DroneCounty.SET_UP_PARAM[3] = tfNumberStations.getText();
         if(tfNumberTracks.getText().equals(""))
-            DroneCounty.SET_UP_PARAM[0] = "2";
-        else if(Integer.parseInt(tfNumberTracks.getText()) > Integer.parseInt(tfNumberStations.getText()) - 1){
-            JOptionPane.showMessageDialog(null, "You can only choose a number from 1 to "
-                    +(Integer.parseInt(tfNumberStations.getText())-1)+".\n "
-                    +(Integer.parseInt(tfNumberStations.getText())-1)+" tracks selected.");
-            DroneCounty.SET_UP_PARAM[0] = Integer.parseInt(tfNumberStations.getText())-1 + "";
+            DroneCounty.SET_UP_PARAM[0] = "1";
+        else if(Integer.parseInt(tfNumberTracks.getText()) > Integer.parseInt(DroneCounty.SET_UP_PARAM[3]) - 1){
+            JOptionPane.showMessageDialog(null, "You can only choose a number of Tracks from 1 to "
+                    +(Integer.parseInt(DroneCounty.SET_UP_PARAM[3])-1)+".\n "
+                    +(Integer.parseInt(DroneCounty.SET_UP_PARAM[3])-1)+" tracks selected.");
+            DroneCounty.SET_UP_PARAM[0] = Integer.parseInt(DroneCounty.SET_UP_PARAM[3])-1 + "";
         }else if(Integer.parseInt(tfNumberTracks.getText()) < 1){
-            JOptionPane.showMessageDialog(null, "You can only choose a number from 1 to "
-                    +(Integer.parseInt(tfNumberStations.getText())-1)+".\n 1 track selected.");
+            JOptionPane.showMessageDialog(null, "You can only choose a number of Tracks from 1 to "
+                    +(Integer.parseInt(DroneCounty.SET_UP_PARAM[3])-1)+".\n 1 track selected.");
             DroneCounty.SET_UP_PARAM[0] = "1";
         }else
             DroneCounty.SET_UP_PARAM[0] = tfNumberTracks.getText();
@@ -265,16 +275,6 @@ public class SetUp extends javax.swing.JFrame {
             DroneCounty.SET_UP_PARAM[2] = "1";
         else
             DroneCounty.SET_UP_PARAM[2] = tfHeight.getText();
-        if(tfNumberStations.getText().equals(""))
-            DroneCounty.SET_UP_PARAM[3] = "2";
-        else if(Integer.parseInt(tfNumberStations.getText()) > 30){
-            JOptionPane.showMessageDialog(null, "You can only choose a number from 2 to 30.\n30 stations selected.");
-            DroneCounty.SET_UP_PARAM[3] = "30";
-        }else if(Integer.parseInt(tfNumberStations.getText()) < 2){
-            JOptionPane.showMessageDialog(null, "You can only choose a number from 2 to 30.\n 2 stations selected.");
-            DroneCounty.SET_UP_PARAM[3] = "2";
-        }else
-            DroneCounty.SET_UP_PARAM[3] = tfNumberStations.getText();
         if(tfNumberTravels.getText().equals(""))
             DroneCounty.SET_UP_PARAM[4] = "100";
         else
