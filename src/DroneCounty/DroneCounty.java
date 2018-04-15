@@ -7,9 +7,13 @@ package DroneCounty;
 
 import Graph.Graph;
 import Interface.SetUp;
+import java.util.ArrayList;
 
 public class DroneCounty {
 
+    public static String SET_UP_PARAM[] = new String[7];
+    public static ArrayList<String> GRAPH_NODES = new ArrayList<String>(); //GRAPH_NODES.add("AB55");
+    
     public static void main(String[] args) {
         
          /* Set the Nimbus look and feel */

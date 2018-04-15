@@ -1,5 +1,6 @@
 package Interface;
 
+import DroneCounty.DroneCounty;
 import java.awt.Graphics;
 
 /**
@@ -8,9 +9,13 @@ import java.awt.Graphics;
  */
 public class CountyMap extends javax.swing.JFrame {
 
+    public static String[] SELECTED_NODES = new String[Integer.parseInt(DroneCounty.SET_UP_PARAM[3])];
+    
     public CountyMap() {
         initComponents();
-        
+        hideButtons();
+        fillSelecNodes();
+        createGraph();
     }
 
     @SuppressWarnings("unchecked")
@@ -48,7 +53,7 @@ public class CountyMap extends javax.swing.JFrame {
         NodeAnd = new javax.swing.JButton();
         NodeDollar = new javax.swing.JButton();
         bReturn = new javax.swing.JButton();
-        bShowTracks = new javax.swing.JButton();
+        bStart = new javax.swing.JButton();
         Map = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -305,16 +310,16 @@ public class CountyMap extends javax.swing.JFrame {
                 bReturnActionPerformed(evt);
             }
         });
-        getContentPane().add(bReturn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 90, 30));
+        getContentPane().add(bReturn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 90, 30));
 
-        bShowTracks.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        bShowTracks.setText("Show Tracks");
-        bShowTracks.addActionListener(new java.awt.event.ActionListener() {
+        bStart.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        bStart.setText("Start");
+        bStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bShowTracksActionPerformed(evt);
+                bStartActionPerformed(evt);
             }
         });
-        getContentPane().add(bShowTracks, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
+        getContentPane().add(bStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 30));
 
         Map.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Map.jpg"))); // NOI18N
         Map.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -426,7 +431,10 @@ public class CountyMap extends javax.swing.JFrame {
     private void NodeZActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NodeZActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NodeZActionPerformed
-
+    private void fillSelecNodes(){
+        for(int fill = 0; fill < SELECTED_NODES.length; fill++)
+            SELECTED_NODES[fill] = "-";
+    }
     private void NodeHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NodeHashActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NodeHashActionPerformed
@@ -442,21 +450,251 @@ public class CountyMap extends javax.swing.JFrame {
     private void NodeDollarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NodeDollarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NodeDollarActionPerformed
-
+    
     private void bReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bReturnActionPerformed
         SetUp setp = new SetUp();
         setp.show();
         this.dispose();
     }//GEN-LAST:event_bReturnActionPerformed
 
-    private void bShowTracksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bShowTracksActionPerformed
-        Graphics graphics = this.getGraphics();
-        graphics.drawLine(NodeA.getX()+25, NodeA.getY()+45, NodeB.getX()+25, NodeB.getY()+50);
+    private void hideButtons(){
+        NodeA.setVisible(false);NodeAnd.setVisible(false);NodeB.setVisible(false);NodeC.setVisible(false);NodeD.setVisible(false);NodeDollar.setVisible(false);NodeE.setVisible(false);NodeF.setVisible(false);
+        NodeG.setVisible(false);NodeH.setVisible(false);NodeHash.setVisible(false);NodeI.setVisible(false);NodeJ.setVisible(false);NodeK.setVisible(false);NodeL.setVisible(false);NodeM.setVisible(false);
+	NodeN.setVisible(false);NodeO.setVisible(false);NodeP.setVisible(false);NodePercent.setVisible(false);NodeQ.setVisible(false);NodeR.setVisible(false);NodeS.setVisible(false);NodeT.setVisible(false);
+	NodeU.setVisible(false);NodeV.setVisible(false);NodeW.setVisible(false);NodeX.setVisible(false);NodeY.setVisible(false);NodeZ.setVisible(false);
+    }
+    
+    private void createGraph(){
+        int nodes = Integer.parseInt(DroneCounty.SET_UP_PARAM[3]);
+        int tracks = Integer.parseInt(DroneCounty.SET_UP_PARAM[0]);
+        for(int nodeNum = 0; nodeNum < nodes; nodeNum++){
+            int rand = (int) (Math.random() * 30);
+            if(!checkNodes(SetUp.NODE_NAMES.get(rand))){
+                SELECTED_NODES[nodeNum] = SetUp.NODE_NAMES.get(rand);
+            }
+        }
+        for(String node : SELECTED_NODES){
+            for(int trackNum = 0; trackNum < tracks; trackNum++){
+                DroneCounty.GRAPH_NODES.add(node + getCloser(node));
+            }
+        }
+        showButtons();
+        System.out.println("Graph Nodes");
+        for(int i = 0; i < DroneCounty.GRAPH_NODES.size(); i++)
+            System.out.println(DroneCounty.GRAPH_NODES.get(i));
+        System.out.println("Selected Nodes");
+        for(int i = 0; i < SELECTED_NODES.length; i++)
+            System.out.println(SELECTED_NODES[i]);
+    }
+    
+    private void showButtons(){
+        for(String node : DroneCounty.GRAPH_NODES){
+            node = "" + node.charAt(0);
+            if(NodeA.getText().equals(node)){
+                NodeA.setVisible(true);
+            }else if(NodeAnd.getText().equals(node)){
+                NodeAnd.setVisible(true);
+            }else if(NodeB.getText().equals(node)){
+                NodeB.setVisible(true);
+            }else if(NodeC.getText().equals(node)){
+                NodeC.setVisible(true);
+            }else if(NodeD.getText().equals(node)){
+                NodeD.setVisible(true);
+            }else if(NodeDollar.getText().equals(node)){
+                NodeDollar.setVisible(true);
+            }else if(NodeE.getText().equals(node)){
+                NodeE.setVisible(true);
+            }else if(NodeF.getText().equals(node)){
+                NodeF.setVisible(true);
+            }else if(NodeG.getText().equals(node)){
+                NodeG.setVisible(true);
+            }else if(NodeH.getText().equals(node)){
+                NodeH.setVisible(true);
+            }else if(NodeHash.getText().equals(node)){
+                NodeHash.setVisible(true);
+            }else if(NodeI.getText().equals(node)){
+                NodeI.setVisible(true);
+            }else if(NodeJ.getText().equals(node)){
+                NodeJ.setVisible(true);
+            }else if(NodeK.getText().equals(node)){
+                NodeK.setVisible(true);
+            }else if(NodeL.getText().equals(node)){
+                NodeL.setVisible(true);
+            }else if(NodeM.getText().equals(node)){
+                NodeM.setVisible(true);
+            }else if(NodeN.getText().equals(node)){
+                NodeN.setVisible(true);
+            }else if(NodeO.getText().equals(node)){
+                NodeO.setVisible(true);
+            }else if(NodeP.getText().equals(node)){
+                NodeP.setVisible(true);
+            }else if(NodePercent.getText().equals(node)){
+                NodePercent.setVisible(true);
+            }else if(NodeQ.getText().equals(node)){
+                NodeQ.setVisible(true);
+            }else if(NodeR.getText().equals(node)){
+                NodeR.setVisible(true);
+            }else if(NodeS.getText().equals(node)){
+                NodeS.setVisible(true);
+            }else if(NodeT.getText().equals(node)){
+                NodeT.setVisible(true);
+            }else if(NodeU.getText().equals(node)){
+                NodeU.setVisible(true);
+            }else if(NodeV.getText().equals(node)){
+                NodeV.setVisible(true);
+            }else if(NodeW.getText().equals(node)){
+                NodeW.setVisible(true);
+            }else if(NodeX.getText().equals(node)){
+                NodeX.setVisible(true);
+            }else if(NodeY.getText().equals(node)){
+                NodeY.setVisible(true);
+            }else if(NodeZ.getText().equals(node)){
+                NodeZ.setVisible(true);
+            }
+        }
+    }
+    
+    private String getCloser(String node){
+        int nodePos[] = getPos(node);
+        String closerNode = "";
+        int closerDist = 10000;
+        for (String nodesN : SELECTED_NODES) {
+            if (!nodesN.equals(node) && !checkIn(node + nodesN)){
+                int[] pos = getPos(nodesN);
+                int dist = Math.abs((nodePos[0]+nodePos[1]) - (pos[0] + pos[1]));
+                if (dist < closerDist){
+                    closerNode = nodesN;
+                    closerDist = dist;
+                }
+            }
+        }
+        return closerNode + closerDist;
+    }
+    
+    private boolean checkIn(String node){
+        for(int checker = 0; checker < DroneCounty.GRAPH_NODES.size(); checker++){
+            String path = DroneCounty.GRAPH_NODES.get(checker);
+            if(path.charAt(0) == node.charAt(0) && path.charAt(1) == node.charAt(1)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean checkNodes(String nodeName){
+        for(int node = 0; node < SELECTED_NODES.length; node++) {
+            if(SELECTED_NODES[node].equals(nodeName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private int[] getPos(String node){
+        int pos[] = new int[2];
+        if(NodeA.getText().equals(node)){
+            pos[0] = NodeA.getX();
+            pos[1] = NodeA.getY();
+        }else if(NodeAnd.getText().equals(node)){
+            pos[0] = NodeAnd.getX();
+            pos[1] = NodeAnd.getY();
+        }else if(NodeB.getText().equals(node)){
+            pos[0] = NodeB.getX();
+            pos[1] = NodeB.getY();
+        }else if(NodeC.getText().equals(node)){
+            pos[0] = NodeC.getX();
+            pos[1] = NodeC.getY();
+        }else if(NodeD.getText().equals(node)){
+            pos[0] = NodeD.getX();
+            pos[1] = NodeD.getY();
+        }else if(NodeDollar.getText().equals(node)){
+            pos[0] = NodeDollar.getX();
+            pos[1] = NodeDollar.getY();
+        }else if(NodeE.getText().equals(node)){
+            pos[0] = NodeE.getX();
+            pos[1] = NodeE.getY();
+        }else if(NodeF.getText().equals(node)){
+            pos[0] = NodeF.getX();
+            pos[1] = NodeF.getY();
+        }else if(NodeG.getText().equals(node)){
+            pos[0] = NodeG.getX();
+            pos[1] = NodeG.getY();
+        }else if(NodeH.getText().equals(node)){
+            pos[0] = NodeH.getX();
+            pos[1] = NodeH.getY();
+        }else if(NodeHash.getText().equals(node)){
+            pos[0] = NodeHash.getX();
+            pos[1] = NodeHash.getY();
+        }else if(NodeI.getText().equals(node)){
+            pos[0] = NodeI.getX();
+            pos[1] = NodeI.getY();
+        }else if(NodeJ.getText().equals(node)){
+            pos[0] = NodeJ.getX();
+            pos[1] = NodeJ.getY();
+        }else if(NodeK.getText().equals(node)){
+            pos[0] = NodeK.getX();
+            pos[1] = NodeK.getY();
+        }else if(NodeL.getText().equals(node)){
+            pos[0] = NodeL.getX();
+            pos[1] = NodeL.getY();
+        }else if(NodeM.getText().equals(node)){
+            pos[0] = NodeM.getX();
+            pos[1] = NodeM.getY();
+        }else if(NodeN.getText().equals(node)){
+            pos[0] = NodeN.getX();
+            pos[1] = NodeN.getY();
+        }else if(NodeO.getText().equals(node)){
+            pos[0] = NodeO.getX();
+            pos[1] = NodeO.getY();
+        }else if(NodeP.getText().equals(node)){
+            pos[0] = NodeP.getX();
+            pos[1] = NodeP.getY();
+        }else if(NodePercent.getText().equals(node)){
+            pos[0] = NodePercent.getX();
+            pos[1] = NodePercent.getY();
+        }else if(NodeQ.getText().equals(node)){
+            pos[0] = NodeQ.getX();
+            pos[1] = NodeQ.getY();
+        }else if(NodeR.getText().equals(node)){
+            pos[0] = NodeR.getX();
+            pos[1] = NodeR.getY();
+        }else if(NodeS.getText().equals(node)){
+            pos[0] = NodeS.getX();
+            pos[1] = NodeS.getY();
+        }else if(NodeT.getText().equals(node)){
+            pos[0] = NodeT.getX();
+            pos[1] = NodeT.getY();
+        }else if(NodeU.getText().equals(node)){
+            pos[0] = NodeU.getX();
+            pos[1] = NodeU.getY();
+        }else if(NodeV.getText().equals(node)){
+            pos[0] = NodeV.getX();
+            pos[1] = NodeV.getY();
+        }else if(NodeW.getText().equals(node)){
+            pos[0] = NodeW.getX();
+            pos[1] = NodeW.getY();
+        }else if(NodeX.getText().equals(node)){
+            pos[0] = NodeX.getX();
+            pos[1] = NodeX.getY();
+        }else if(NodeY.getText().equals(node)){
+            pos[0] = NodeY.getX();
+            pos[1] = NodeY.getY();
+        }else if(NodeZ.getText().equals(node)){
+            pos[0] = NodeZ.getX();
+            pos[1] = NodeZ.getY();
+        }
+        return pos;
+    }
+    
+    private void bStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bStartActionPerformed
+        /*Graphics graphics = this.getGraphics();
+        graphics.drawLine(NodeX.getX()+25, NodeX.getY()+45, NodeE.getX()+25, NodeE.getY()+50);
         graphics.drawLine(NodeA.getX()+25, NodeA.getY()+45, NodeC.getX()+25, NodeC.getY()+50);
         graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeC.getX()+25, NodeC.getY()+50);
         graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeH.getX()+25, NodeH.getY()+50);
-        graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeS.getX()+25, NodeS.getY()+50);
-    }//GEN-LAST:event_bShowTracksActionPerformed
+        graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeS.getX()+25, NodeS.getY()+50);*/
+        bStart.setEnabled(false);
+    }//GEN-LAST:event_bStartActionPerformed
 
     /**
      * @param args the command line arguments
@@ -526,6 +764,6 @@ public class CountyMap extends javax.swing.JFrame {
     private javax.swing.JButton NodeY;
     private javax.swing.JButton NodeZ;
     private javax.swing.JButton bReturn;
-    private javax.swing.JButton bShowTracks;
+    private javax.swing.JButton bStart;
     // End of variables declaration//GEN-END:variables
 }

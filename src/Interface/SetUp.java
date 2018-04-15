@@ -5,13 +5,18 @@ package Interface;
  * @author †Psicops†
  */
 
+import DroneCounty.DroneCounty;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class SetUp extends javax.swing.JFrame {
-
-    public String setup[] = new String[7];
+    
+    public static ArrayList<String> NODE_NAMES= new ArrayList<>();
     
     public SetUp() {
+        NODE_NAMES.add("A");NODE_NAMES.add("B");NODE_NAMES.add("C");NODE_NAMES.add("D");NODE_NAMES.add("E");NODE_NAMES.add("F");NODE_NAMES.add("G");NODE_NAMES.add("H");NODE_NAMES.add("I");NODE_NAMES.add("J");
+        NODE_NAMES.add("K");NODE_NAMES.add("L");NODE_NAMES.add("M");NODE_NAMES.add("N");NODE_NAMES.add("O");NODE_NAMES.add("P");NODE_NAMES.add("Q");NODE_NAMES.add("R");NODE_NAMES.add("S");NODE_NAMES.add("T");
+        NODE_NAMES.add("U");NODE_NAMES.add("V");NODE_NAMES.add("W");NODE_NAMES.add("X");NODE_NAMES.add("Y");NODE_NAMES.add("Z");NODE_NAMES.add("#");NODE_NAMES.add("$");NODE_NAMES.add("%");NODE_NAMES.add("&");
         initComponents();
     }
 
@@ -240,45 +245,45 @@ public class SetUp extends javax.swing.JFrame {
 
     private void bReadyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bReadyActionPerformed
         if(tfNumberTracks.getText().equals(""))
-            setup[0] = "2";
+            DroneCounty.SET_UP_PARAM[0] = "2";
         else if(Integer.parseInt(tfNumberTracks.getText()) > Integer.parseInt(tfNumberStations.getText()) - 1){
             JOptionPane.showMessageDialog(null, "You can only choose a number from 1 to "
                     +(Integer.parseInt(tfNumberStations.getText())-1)+".\n "
                     +(Integer.parseInt(tfNumberStations.getText())-1)+" tracks selected.");
-            setup[0] = Integer.parseInt(tfNumberStations.getText())-1 + "";
+            DroneCounty.SET_UP_PARAM[0] = Integer.parseInt(tfNumberStations.getText())-1 + "";
         }else if(Integer.parseInt(tfNumberTracks.getText()) < 1){
             JOptionPane.showMessageDialog(null, "You can only choose a number from 1 to "
                     +(Integer.parseInt(tfNumberStations.getText())-1)+".\n 1 track selected.");
-            setup[0] = "1";
+            DroneCounty.SET_UP_PARAM[0] = "1";
         }else
-            setup[0] = tfNumberTracks.getText();
+            DroneCounty.SET_UP_PARAM[0] = tfNumberTracks.getText();
         if(tfWidth.getText().equals(""))
-            setup[1] = "1";
+            DroneCounty.SET_UP_PARAM[1] = "1";
         else
-            setup[1] = tfWidth.getText();
+            DroneCounty.SET_UP_PARAM[1] = tfWidth.getText();
         if(tfHeight.getText().equals(""))
-            setup[2] = "1";
+            DroneCounty.SET_UP_PARAM[2] = "1";
         else
-            setup[2] = tfHeight.getText();
+            DroneCounty.SET_UP_PARAM[2] = tfHeight.getText();
         if(tfNumberStations.getText().equals(""))
-            setup[3] = "2";
+            DroneCounty.SET_UP_PARAM[3] = "2";
         else if(Integer.parseInt(tfNumberStations.getText()) > 30){
             JOptionPane.showMessageDialog(null, "You can only choose a number from 2 to 30.\n30 stations selected.");
-            setup[3] = "30";
+            DroneCounty.SET_UP_PARAM[3] = "30";
         }else if(Integer.parseInt(tfNumberStations.getText()) < 2){
             JOptionPane.showMessageDialog(null, "You can only choose a number from 2 to 30.\n 2 stations selected.");
-            setup[3] = "2";
+            DroneCounty.SET_UP_PARAM[3] = "2";
         }else
-            setup[3] = tfNumberStations.getText();
+            DroneCounty.SET_UP_PARAM[3] = tfNumberStations.getText();
         if(tfNumberTravels.getText().equals(""))
-            setup[4] = "100";
+            DroneCounty.SET_UP_PARAM[4] = "100";
         else
-            setup[4] = tfNumberTravels.getText();
+            DroneCounty.SET_UP_PARAM[4] = tfNumberTravels.getText();
         if(tfTime.getText().equals(""))
-            setup[5] = "10";
+            DroneCounty.SET_UP_PARAM[5] = "10";
         else
-            setup[5] = tfTime.getText();
-        setup[6] = cbAlgorithm.getSelectedItem().toString();
+            DroneCounty.SET_UP_PARAM[5] = tfTime.getText();
+        DroneCounty.SET_UP_PARAM[6] = cbAlgorithm.getSelectedItem().toString();
         CountyMap map = new CountyMap();
         map.show();
         this.dispose();
