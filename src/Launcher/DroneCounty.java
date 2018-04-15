@@ -13,6 +13,7 @@ public class DroneCounty {
 
     public static String SET_UP_PARAM[] = new String[8];
     public static ArrayList<String> GRAPH_NODES = new ArrayList<String>(); //GRAPH_NODES.add("AB55");
+    public static Graph MY_GRAPH;
     
     public static void main(String[] args) {
         
@@ -41,8 +42,6 @@ public class DroneCounty {
         
         SetUp setup = new SetUp();
         setup.show();
-        
-        Graph myGraph = new Graph(9);
 
         /*myGraph.addEdge(0, 1, 4); myGraph.addEdge(0, 7, 8); myGraph.addEdge(1, 2, 8); 
         myGraph.addEdge(1, 7, 11); myGraph.addEdge(2, 1, 8); myGraph.addEdge(2, 8, 2); 

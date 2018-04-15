@@ -6,6 +6,7 @@ package UI;
  */
 
 import Launcher.DroneCounty;
+import Logic.Graph;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -48,7 +49,7 @@ public class SetUp extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(420, 330));
         setResizable(false);
 
-        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/DroneCounty.jpg"))); // NOI18N
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/DroneCounty.jpg"))); // NOI18N
 
         lblWidth.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         lblWidth.setText("Tracks Width (m): ");
@@ -140,7 +141,7 @@ public class SetUp extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel1.setText("Hour Simulation (s):");
+        jLabel1.setText("Hour/Simulation (s):");
 
         tfHour.setMaximumSize(new java.awt.Dimension(6, 20));
         tfHour.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -240,7 +241,7 @@ public class SetUp extends javax.swing.JFrame {
                     .addComponent(tfHour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addComponent(bReady)
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
@@ -319,10 +320,22 @@ public class SetUp extends javax.swing.JFrame {
             DroneCounty.SET_UP_PARAM[7] = "1";
         else
             DroneCounty.SET_UP_PARAM[7] = tfHour.getText();
+        
         CountyMap map = new CountyMap();
         map.show();
-        for(String i : DroneCounty.SET_UP_PARAM)
-            System.out.println(i);
+//        for(String i : DroneCounty.SET_UP_PARAM)
+//            System.out.println(i);
+
+        DroneCounty.MY_GRAPH = new Graph(DroneCounty.SET_UP_PARAM[3]);
+        
+        DroneCounty.MY_GRAPH.startGraph();
+        
+        DroneCounty.MY_GRAPH.getShortestPath(CountyMap.SELECTED_NODES[0], CountyMap.SELECTED_NODES[2]);
+        
+        //DroneCounty.MY_GRAPH.calculate(DroneCounty.MY_GRAPH.getVertex(0));
+        
+        //DroneCounty.MY_GRAPH.printMinimumDistance();
+        
         this.dispose();
     }//GEN-LAST:event_bReadyActionPerformed
 

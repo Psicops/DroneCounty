@@ -310,7 +310,7 @@ public class CountyMap extends javax.swing.JFrame {
         });
         getContentPane().add(bStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
 
-        Map.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Map.jpg"))); // NOI18N
+        Map.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Map.jpg"))); // NOI18N
         Map.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(Map, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -685,7 +685,6 @@ public class CountyMap extends javax.swing.JFrame {
     
     private void bStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bStartActionPerformed
         drawArcs();
-        bStart.setEnabled(false);
     }//GEN-LAST:event_bStartActionPerformed
 
     /**
