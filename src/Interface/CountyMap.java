@@ -52,7 +52,6 @@ public class CountyMap extends javax.swing.JFrame {
         NodePercent = new javax.swing.JButton();
         NodeAnd = new javax.swing.JButton();
         NodeDollar = new javax.swing.JButton();
-        bReturn = new javax.swing.JButton();
         bStart = new javax.swing.JButton();
         Map = new javax.swing.JLabel();
 
@@ -303,15 +302,6 @@ public class CountyMap extends javax.swing.JFrame {
         });
         getContentPane().add(NodeDollar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 40, -1, 30));
 
-        bReturn.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        bReturn.setText("Set Up");
-        bReturn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bReturnActionPerformed(evt);
-            }
-        });
-        getContentPane().add(bReturn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 90, 30));
-
         bStart.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         bStart.setText("Start");
         bStart.addActionListener(new java.awt.event.ActionListener() {
@@ -319,7 +309,7 @@ public class CountyMap extends javax.swing.JFrame {
                 bStartActionPerformed(evt);
             }
         });
-        getContentPane().add(bStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 30));
+        getContentPane().add(bStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
 
         Map.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/Map.jpg"))); // NOI18N
         Map.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -451,12 +441,6 @@ public class CountyMap extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_NodeDollarActionPerformed
     
-    private void bReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bReturnActionPerformed
-        SetUp setp = new SetUp();
-        setp.show();
-        this.dispose();
-    }//GEN-LAST:event_bReturnActionPerformed
-
     private void hideButtons(){
         NodeA.setVisible(false);NodeAnd.setVisible(false);NodeB.setVisible(false);NodeC.setVisible(false);NodeD.setVisible(false);NodeDollar.setVisible(false);NodeE.setVisible(false);NodeF.setVisible(false);
         NodeG.setVisible(false);NodeH.setVisible(false);NodeHash.setVisible(false);NodeI.setVisible(false);NodeJ.setVisible(false);NodeK.setVisible(false);NodeL.setVisible(false);NodeM.setVisible(false);
@@ -471,7 +455,8 @@ public class CountyMap extends javax.swing.JFrame {
             int rand = (int) (Math.random() * 30);
             if(!checkNodes(SetUp.NODE_NAMES.get(rand))){
                 SELECTED_NODES[nodeNum] = SetUp.NODE_NAMES.get(rand);
-            }
+            }else
+                nodeNum--;
         }
         for(String node : SELECTED_NODES){
             for(int trackNum = 0; trackNum < tracks; trackNum++){
@@ -479,12 +464,21 @@ public class CountyMap extends javax.swing.JFrame {
             }
         }
         showButtons();
-        System.out.println("Graph Nodes");
+        /*System.out.println("Graph Nodes");
         for(int i = 0; i < DroneCounty.GRAPH_NODES.size(); i++)
             System.out.println(DroneCounty.GRAPH_NODES.get(i));
         System.out.println("Selected Nodes");
         for(int i = 0; i < SELECTED_NODES.length; i++)
-            System.out.println(SELECTED_NODES[i]);
+            System.out.println(SELECTED_NODES[i]);*/
+    }
+    
+    private void drawArcs(){
+        Graphics graphics = this.getGraphics();
+        for(int arcs = 0; arcs < DroneCounty.GRAPH_NODES.size(); arcs++){
+            int sourceNode[] = getPos(""+DroneCounty.GRAPH_NODES.get(arcs).charAt(0));
+            int destNode[] = getPos(""+DroneCounty.GRAPH_NODES.get(arcs).charAt(1));
+            graphics.drawLine(sourceNode[0]+25, sourceNode[1]+45, destNode[0]+25, destNode[1]+50);
+        }
     }
     
     private void showButtons(){
@@ -687,12 +681,7 @@ public class CountyMap extends javax.swing.JFrame {
     }
     
     private void bStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bStartActionPerformed
-        /*Graphics graphics = this.getGraphics();
-        graphics.drawLine(NodeX.getX()+25, NodeX.getY()+45, NodeE.getX()+25, NodeE.getY()+50);
-        graphics.drawLine(NodeA.getX()+25, NodeA.getY()+45, NodeC.getX()+25, NodeC.getY()+50);
-        graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeC.getX()+25, NodeC.getY()+50);
-        graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeH.getX()+25, NodeH.getY()+50);
-        graphics.drawLine(NodeB.getX()+25, NodeB.getY()+45, NodeS.getX()+25, NodeS.getY()+50);*/
+        drawArcs();
         bStart.setEnabled(false);
     }//GEN-LAST:event_bStartActionPerformed
 
@@ -763,7 +752,6 @@ public class CountyMap extends javax.swing.JFrame {
     private javax.swing.JButton NodeX;
     private javax.swing.JButton NodeY;
     private javax.swing.JButton NodeZ;
-    private javax.swing.JButton bReturn;
     private javax.swing.JButton bStart;
     // End of variables declaration//GEN-END:variables
 }
