@@ -558,8 +558,6 @@ public class CountyMap extends javax.swing.JFrame {
                 int posY = Math.abs((nodePos[1] - pos[1]));
                 int dist = (int) Math.sqrt(posX*posX + posY*posY);
                 if (dist < closerDist){
-                    /*System.out.println("Nodo Partida: " + node +" Nodo Destino: " + nodesN);
-                    System.out.println("Cercano: " + closerDist + "\nNuevo Cercano: " +dist);*/
                     closerNode = nodesN;
                     closerDist = dist;
                 }

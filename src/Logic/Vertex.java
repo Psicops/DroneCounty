@@ -14,6 +14,7 @@ public class Vertex implements Comparable<Vertex>{
     public LinkedList<Vertex> PATH;
     public double MIN_DISTANCE = Double.POSITIVE_INFINITY;
     public Vertex PREVIOUS;
+    public ArrayList<Tracks> TRACK;
     
     public int compareTo(Vertex pNext){
         return Double.compare(MIN_DISTANCE,pNext.MIN_DISTANCE);		
@@ -23,6 +24,7 @@ public class Vertex implements Comparable<Vertex>{
         this.NAME = pName;
         NEIGHBOURS = new ArrayList<Edge>();
         PATH = new LinkedList<Vertex>();
+        TRACK = new ArrayList<Tracks>();
     }
 
     public String toString(){
