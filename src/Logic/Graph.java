@@ -6,7 +6,7 @@ package Logic;
  */
 
 import Launcher.DroneCounty;
-import UI.CountyMap;
+import static Logic.FlightControl.SELECTED_NODES;
 import java.util.*;
 import javax.swing.JOptionPane;
 
@@ -16,7 +16,7 @@ public class Graph {
     
     public Graph(String vertexNumber){
         VERTICES = new ArrayList<Vertex>(Integer.parseInt(vertexNumber));
-        for(String vertix : CountyMap.SELECTED_NODES){
+        for(String vertix : SELECTED_NODES){
             VERTICES.add(new Vertex(vertix));
         }
     }
@@ -73,10 +73,10 @@ public class Graph {
     public String getRandomNodes(){
         while(true){
             Random rand = new Random();
-            String src = CountyMap.SELECTED_NODES[rand.nextInt(Integer.parseInt(DroneCounty.SET_UP_PARAM[3]))];
+            String src = SELECTED_NODES[rand.nextInt(Integer.parseInt(DroneCounty.SET_UP_PARAM[3]))];
             String dest = "";
             while(true){
-                String newNode = CountyMap.SELECTED_NODES[rand.nextInt(Integer.parseInt(DroneCounty.SET_UP_PARAM[3]))];
+                String newNode = SELECTED_NODES[rand.nextInt(Integer.parseInt(DroneCounty.SET_UP_PARAM[3]))];
                 if(!newNode.equals(src)){
                     dest = newNode;
                     break;

@@ -6,6 +6,7 @@ package UI;
  */
 
 import Launcher.DroneCounty;
+import Logic.FlightControl;
 import Logic.Graph;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -325,7 +326,9 @@ public class SetUp extends javax.swing.JFrame {
             DroneCounty.SET_UP_PARAM[7] = tfHour.getText();
         
         CountyMap map = new CountyMap();
-        map.show();
+        
+        FlightControl flightControl = new FlightControl(map);
+        flightControl.initiate();
 
         DroneCounty.MY_GRAPH = new Graph(DroneCounty.SET_UP_PARAM[3]);
         

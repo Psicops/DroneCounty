@@ -1,21 +1,19 @@
 package UI;
 
 import Launcher.DroneCounty;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 /**
  *
  * @author †Psicops†
  */
 public class CountyMap extends javax.swing.JFrame {
-
-    public static String[] SELECTED_NODES = new String[Integer.parseInt(DroneCounty.SET_UP_PARAM[3])];
     
     public CountyMap() {
         initComponents();
         hideButtons();
-        fillSelecNodes();
-        createGraph();
     }
 
     @SuppressWarnings("unchecked")
@@ -420,10 +418,7 @@ public class CountyMap extends javax.swing.JFrame {
     private void NodeZActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NodeZActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NodeZActionPerformed
-    private void fillSelecNodes(){
-        for(int fill = 0; fill < SELECTED_NODES.length; fill++)
-            SELECTED_NODES[fill] = "-";
-    }
+    
     private void NodeHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NodeHashActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NodeHashActionPerformed
@@ -447,40 +442,48 @@ public class CountyMap extends javax.swing.JFrame {
 	NodeU.setVisible(false);NodeV.setVisible(false);NodeW.setVisible(false);NodeX.setVisible(false);NodeY.setVisible(false);NodeZ.setVisible(false);
     }
     
-    private void createGraph(){
-        int nodes = Integer.parseInt(DroneCounty.SET_UP_PARAM[3]);
-        int tracks = Integer.parseInt(DroneCounty.SET_UP_PARAM[0]);
-        for(int nodeNum = 0; nodeNum < nodes; nodeNum++){
-            int rand = (int) (Math.random() * 30);
-            if(!checkNodes(SetUp.NODE_NAMES.get(rand))){
-                SELECTED_NODES[nodeNum] = SetUp.NODE_NAMES.get(rand);
-            }else
-                nodeNum--;
-        }
-        for(String node : SELECTED_NODES){
-            for(int trackNum = 0; trackNum < tracks; trackNum++){
-                DroneCounty.GRAPH_NODES.add(node + getCloser(node));
-            }
-        }
-        showButtons();
-//        System.out.println("Graph Nodes");
-//        for(String i : DroneCounty.GRAPH_NODES)
-//            System.out.println(i);
-//        System.out.println("Selected Nodes");
-//        for(String i : SELECTED_NODES)
-//            System.out.println(i);
-    }
-    
     private void drawArcs(){
         Graphics graphics = this.getGraphics();
         for(int arcs = 0; arcs < DroneCounty.GRAPH_NODES.size(); arcs++){
+            Color randomColor = generateColor();
             int sourceNode[] = getPos(""+DroneCounty.GRAPH_NODES.get(arcs).charAt(0));
             int destNode[] = getPos(""+DroneCounty.GRAPH_NODES.get(arcs).charAt(1));
+            graphics.setPaintMode();
+            graphics.setColor(randomColor);
             graphics.drawLine(sourceNode[0]+25, sourceNode[1]+45, destNode[0]+25, destNode[1]+50);
         }
     }
     
-    private void showButtons(){
+    /*private void drawDrones(){
+        Graphics graphics = this.getGraphics();
+        Color randomColor = generateColor();
+        int sourceNode[] = getPos(""+DroneCounty.GRAPH_NODES.get(0).charAt(0));
+        graphics.setPaintMode();
+        graphics.setColor(randomColor);
+        graphics.fillArc(sourceNode[0]+50, sourceNode[1]+50, 10, 10, 0, 360);
+    }*/
+    
+    /*private void moveDrones(){
+        Circle drone = new Circle(50,50,50);
+        Line line = new Line(250, 250, 450.0, 450.0);
+        PathTransition transition = new PathTransition();
+        transition.setNode(drone);
+        transition.setDuration(Duration.seconds(3));
+        transition.setPath(line);
+        transition.setCycleCount(1);
+        transition.play();
+    }*/
+    
+    private Color generateColor(){
+        Random rand = new Random();
+        float r = rand.nextFloat();
+        float g = rand.nextFloat()/2f;
+        float b = rand.nextFloat();
+        Color randomColor = new Color(r, g, b);
+        return randomColor;
+    }
+    
+    public void showButtons(){
         for(String node : DroneCounty.GRAPH_NODES){
             node = "" + node.charAt(0);
             if(NodeA.getText().equals(node)){
@@ -547,45 +550,7 @@ public class CountyMap extends javax.swing.JFrame {
         }
     }
     
-    private String getCloser(String node){
-        int nodePos[] = getPos(node);
-        String closerNode = "";
-        int closerDist = 10000;
-        for (String nodesN : SELECTED_NODES) {
-            if (!nodesN.equals(node) && !checkIn(node + nodesN)){
-                int[] pos = getPos(nodesN);
-                int posX = Math.abs((nodePos[0] - pos[0]));
-                int posY = Math.abs((nodePos[1] - pos[1]));
-                int dist = (int) Math.sqrt(posX*posX + posY*posY);
-                if (dist < closerDist){
-                    closerNode = nodesN;
-                    closerDist = dist;
-                }
-            }
-        }
-        return closerNode + closerDist;
-    }
-    
-    private boolean checkIn(String node){
-        for(int checker = 0; checker < DroneCounty.GRAPH_NODES.size(); checker++){
-            String path = DroneCounty.GRAPH_NODES.get(checker);
-            if(path.charAt(0) == node.charAt(0) && path.charAt(1) == node.charAt(1)){
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private boolean checkNodes(String nodeName){
-        for(int node = 0; node < SELECTED_NODES.length; node++) {
-            if(SELECTED_NODES[node].equals(nodeName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private int[] getPos(String node){
+    public int[] getPos(String node){
         int pos[] = new int[2];
         if(NodeA.getText().equals(node)){
             pos[0] = NodeA.getX();
@@ -683,6 +648,8 @@ public class CountyMap extends javax.swing.JFrame {
     
     private void bStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bStartActionPerformed
         drawArcs();
+        //drawDrones();
+        //moveDrones();
     }//GEN-LAST:event_bStartActionPerformed
 
     /**
