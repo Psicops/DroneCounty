@@ -3,6 +3,8 @@ package Logic;
 import Launcher.DroneCounty;
 import UI.CountyMap;
 import UI.SetUp;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -10,16 +12,17 @@ import UI.SetUp;
  */
 public class FlightControl {
     
-    public CountyMap UI;
+    public CountyMap UI_MAP;
     public static String[] SELECTED_NODES = new String[Integer.parseInt(DroneCounty.SET_UP_PARAM[3])];
-    public static int FLIGHT_SECOND = 0;
+    public int FLIGHT_SECOND = 0;
+    public static ArrayList<Drone> DRONES = new ArrayList<>();
     
     public FlightControl(CountyMap map){
-        this.UI = map;
+        this.UI_MAP = map;
     }
 
     public void initiate(){
-        UI.show();
+        UI_MAP.show();
         fillSelecNodes();
         createGraph();
     }
@@ -40,7 +43,7 @@ public class FlightControl {
             }
         }
         getFlightsNumber();
-        this.UI.showButtons();
+        this.UI_MAP.showButtons();
 //        System.out.println("Graph Nodes");
 //        for(String i : DroneCounty.GRAPH_NODES)
 //            System.out.println(i);
@@ -52,7 +55,7 @@ public class FlightControl {
     public void getFlightsNumber(){
         int flightsNumber = Integer.parseInt(DroneCounty.SET_UP_PARAM[4]);
         int time = Integer.parseInt(DroneCounty.SET_UP_PARAM[5]);
-        FLIGHT_SECOND = (int)time/flightsNumber;
+        FLIGHT_SECOND = (int)flightsNumber/time;
     }
     
     private void fillSelecNodes(){
@@ -61,12 +64,12 @@ public class FlightControl {
     }
     
     private String getCloser(String node){
-        int nodePos[] = UI.getPos(node);
+        int nodePos[] = UI_MAP.getPos(node);
         String closerNode = "";
         int closerDist = 10000;
         for (String nodesN : SELECTED_NODES) {
             if (!nodesN.equals(node) && !checkIn(node + nodesN)){
-                int[] pos = UI.getPos(nodesN);
+                int[] pos = UI_MAP.getPos(nodesN);
                 int posX = Math.abs((nodePos[0] - pos[0]));
                 int posY = Math.abs((nodePos[1] - pos[1]));
                 int dist = (int) Math.sqrt(posX*posX + posY*posY);
@@ -98,19 +101,71 @@ public class FlightControl {
         return false;
     }
     
+    public void startDrones(){
+        try{
+            while(!DRONES.isEmpty()){
+                long start = System.currentTimeMillis();
+                int dronesDone = 0;
+                while(System.currentTimeMillis() - start <= 1000 && dronesDone < FLIGHT_SECOND){
+                    Drone drone = DRONES.get(0);
+                    moveDrones(drone);
+                    DRONES.remove(0);
+                    dronesDone++;
+                    if(DRONES.isEmpty())
+                        break;
+                }
+                //System.out.println("Must be: " + FLIGHT_SECOND + " flights/s. -> Done: " + dronesDone + " flights/s.");
+            }
+        }catch(Exception E){
+            JOptionPane.showMessageDialog(null, "Can't do " + FLIGHT_SECOND + " flights/s.\n");
+        }
+    }
+    
+    public void moveDrones(Drone drone){
+        if(!drone.SOURCE.equals(drone.DEST)){
+            if(drone.PATH.size() > 1){
+                drone.setPath(drone.PATH.get(1), drone.PATH.get(drone.PATH.size()-1));
+                drone.PATH.remove(0);
+                if(!drone.SOURCE.equals(drone.DEST))
+                    DRONES.add(drone);
+            }
+        }
+    }
+    
+    public ArrayList<Drone> getHalf(ArrayList<Drone> drones, String half){
+        if(half.equals("1")){
+            ArrayList<Drone> first = new ArrayList<>();
+            for(int drone = 0 ; drone < (int)drones.size()/2; drone++){
+                first.add(drones.get(drone));
+            }
+            return first;
+        }else{
+            ArrayList<Drone> second = new ArrayList<>();
+            for(int drone = (int) drones.size()/2 ; drone < drones.size(); drone++){
+                second.add(drones.get(drone));
+            }
+            return second;
+        }
+    }
+    
+    public void getDC(ArrayList<Drone> drones){
+        if(drones.size() >= 2){
+//            System.out.println("Entra DC.");
+            ArrayList<Drone> first = getHalf(drones, "1");
+            getDC(first);
+            ArrayList<Drone> second = getHalf(drones, "2");
+            getDC(second);
+        }else if(drones.size() == 1){
+//            System.out.println("Entra move.");
+            moveDrones(drones.get(0));
+        }
+    }
+    
     public void getBacktraking(){
         
     }
     
-    public void getDC(){
-        
-    }
-    
     public void getProba(){
-        
-    }
-    
-    public void moveDrones(){
         
     }
     

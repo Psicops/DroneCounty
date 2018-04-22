@@ -6,6 +6,7 @@ package UI;
  */
 
 import Launcher.DroneCounty;
+import Logic.Drone;
 import Logic.FlightControl;
 import Logic.Graph;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import javax.swing.JOptionPane;
 public class SetUp extends javax.swing.JFrame {
     
     public static ArrayList<String> NODE_NAMES= new ArrayList<>();
+    public static ArrayList<Drone> ALGORITHM_TEST = new ArrayList<>();
     
     public SetUp() {
         NODE_NAMES.add("A");NODE_NAMES.add("B");NODE_NAMES.add("C");NODE_NAMES.add("D");NODE_NAMES.add("E");NODE_NAMES.add("F");NODE_NAMES.add("G");NODE_NAMES.add("H");NODE_NAMES.add("I");NODE_NAMES.add("J");
@@ -333,6 +335,18 @@ public class SetUp extends javax.swing.JFrame {
         DroneCounty.MY_GRAPH = new Graph(DroneCounty.SET_UP_PARAM[3]);
         
         DroneCounty.MY_GRAPH.startGraph();
+        
+        ALGORITHM_TEST = flightControl.DRONES;
+        
+        long start = System.nanoTime();
+        flightControl.getDC(ALGORITHM_TEST);
+        long finish = System.nanoTime();
+        System.out.println("DC duró: " + (double)(finish - start)*1.0e-9+ " segundos.");
+        
+        long start1 = System.nanoTime();
+        flightControl.startDrones();
+        long finish1 = System.nanoTime();
+        System.out.println("starDrones duró: " + (double)(finish1 - start1)*1.0e-9+ " segundos.");
         
         this.dispose();
     }//GEN-LAST:event_bReadyActionPerformed

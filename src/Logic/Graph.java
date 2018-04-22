@@ -9,6 +9,7 @@ import Launcher.DroneCounty;
 import static Logic.FlightControl.SELECTED_NODES;
 import java.util.*;
 import javax.swing.JOptionPane;
+import Logic.FlightControl;
 
 public class Graph {
     
@@ -67,6 +68,7 @@ public class Graph {
             Drone newDrone = new Drone();
             String path = getRandomNodes();
             insertTrack(newDrone, path);
+            FlightControl.DRONES.add(newDrone);
         }
     }
     
@@ -100,7 +102,9 @@ public class Graph {
     public void insertTrack(Drone newDrone, String path){
         for(Vertex vertex : DroneCounty.MY_GRAPH.VERTICES){
             for(Tracks track : vertex.TRACK){
-                if(track.SOURCE.equals("" + path.charAt(0)) && track.DEST.equals(""+path.charAt(1))){
+                if(track.SOURCE.equals("" + path.charAt(0)) && track.DEST.equals("" + path.charAt(1))){
+                    newDrone.setPath("" + path.charAt(0), "" + path.charAt(1));
+                    getDronePath(newDrone);
                     addDrone(track, newDrone);
                 }
             }
@@ -139,19 +143,30 @@ public class Graph {
         }
     }
     
-    public void getShortestPath(String source, String dest){
+    public void getDronePath(Drone drone){
+        ArrayList<String> path = getShortestPath(drone.SOURCE, drone.DEST);
+        for(String traveler : path){
+            drone.PATH.add(traveler);
+        }
+    }
+    
+    public ArrayList<String> getShortestPath(String source, String dest){
+        ArrayList<String> path = new ArrayList<>();
         int srcVertex = getNodePosition(source);
         calculateDijkstra(getVertex(srcVertex));
         for(Vertex vertix:getVertices()){
             if(vertix.NAME.equals(dest)){
-                System.out.print("Destiny Vertex -> "+vertix+" , Distance -> "+ vertix.MIN_DISTANCE+" , Path -> ");
+                //System.out.print("Destiny Vertex -> "+vertix+" , Distance -> "+ vertix.MIN_DISTANCE+" , Path -> ");
                 for(Vertex pathVert:vertix.PATH) {
-                    System.out.print(pathVert+" ");
+                    path.add(pathVert.NAME);
+                    //System.out.print(pathVert+" ");
                 }
-                System.out.println(""+vertix);
-                break;
+                path.add(vertix.NAME);
+                //System.out.println(""+vertix);
+                return path;
             }
         }
+        return null;
     }
     
     public void printMinimumDistance(){
@@ -161,6 +176,14 @@ public class Graph {
                 System.out.print(pathVert+" ");
             }
             System.out.println(""+v);
+        }
+    }
+    
+    public void printDroneSize(){
+        for(Vertex vertex : DroneCounty.MY_GRAPH.VERTICES){
+            for(Tracks track : vertex.TRACK){
+                System.out.println(track.DRONES.size() + "+");
+            }
         }
     }
     
