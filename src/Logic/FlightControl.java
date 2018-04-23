@@ -4,6 +4,7 @@ import Launcher.DroneCounty;
 import UI.CountyMap;
 import UI.SetUp;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,6 +17,9 @@ public class FlightControl {
     public static String[] SELECTED_NODES = new String[Integer.parseInt(DroneCounty.SET_UP_PARAM[3])];
     public int FLIGHT_SECOND = 0;
     public static ArrayList<Drone> DRONES = new ArrayList<>();
+    public int COMPLETED_FLIGHTS;
+    public int REMAINING_FLIGHTS;
+    
     
     public FlightControl(CountyMap map){
         this.UI_MAP = map;
@@ -25,6 +29,8 @@ public class FlightControl {
         UI_MAP.show();
         fillSelecNodes();
         createGraph();
+        COMPLETED_FLIGHTS = 0;
+        REMAINING_FLIGHTS = Integer.parseInt(DroneCounty.SET_UP_PARAM[4]);
     }
     
     private void createGraph(){
@@ -109,12 +115,17 @@ public class FlightControl {
                 while(System.currentTimeMillis() - start <= 1000 && dronesDone < FLIGHT_SECOND){
                     Drone drone = DRONES.get(0);
                     moveDrones(drone);
+                    COMPLETED_FLIGHTS++;
+                    REMAINING_FLIGHTS = DRONES.size() - 1;
                     DRONES.remove(0);
                     dronesDone++;
                     if(DRONES.isEmpty())
                         break;
+                    if(dronesDone == FLIGHT_SECOND){
+                        Thread.sleep(1000 - (System.currentTimeMillis() - start));
+                    }
                 }
-                //System.out.println("Must be: " + FLIGHT_SECOND + " flights/s. -> Done: " + dronesDone + " flights/s.");
+                System.out.println("Must be: " + FLIGHT_SECOND + " flights/s. -> Done: " + dronesDone + " flights/s.");
             }
         }catch(Exception E){
             JOptionPane.showMessageDialog(null, "Can't do " + FLIGHT_SECOND + " flights/s.\n");
@@ -127,8 +138,30 @@ public class FlightControl {
                 drone.setPath(drone.PATH.get(1), drone.PATH.get(drone.PATH.size()-1));
                 drone.PATH.remove(0);
                 if(!drone.SOURCE.equals(drone.DEST))
-                    DRONES.add(drone);
+                    moveDrones(drone);
             }
+        }
+    }
+    
+    public boolean divideConquer(ArrayList<Drone> drones){
+        boolean done = false;
+        long start = System.currentTimeMillis();
+        getDC(drones);
+        long finish = System.currentTimeMillis();
+        if((double)(finish - start)*1.0e-9 < FLIGHT_SECOND){
+            done = true;
+        }
+        return done;
+    }
+    
+    public void getDC(ArrayList<Drone> drones){
+        if(drones.size() >= 2){
+            ArrayList<Drone> first = getHalf(drones, "1");
+            getDC(first);
+            ArrayList<Drone> second = getHalf(drones, "2");
+            getDC(second);
+        }else if(drones.size() == 1){
+            moveDrones(drones.get(0));
         }
     }
     
@@ -147,25 +180,29 @@ public class FlightControl {
             return second;
         }
     }
+
+    public boolean Probabilistic(ArrayList<Drone> drones){
+        boolean done = false;
+        long start = System.currentTimeMillis();
+        getProba(drones);
+        long finish = System.currentTimeMillis();
+        if((double)(finish - start)*1.0e-9 < FLIGHT_SECOND){
+            done = true;
+        }
+        return done;
+    }
     
-    public void getDC(ArrayList<Drone> drones){
-        if(drones.size() >= 2){
-//            System.out.println("Entra DC.");
-            ArrayList<Drone> first = getHalf(drones, "1");
-            getDC(first);
-            ArrayList<Drone> second = getHalf(drones, "2");
-            getDC(second);
-        }else if(drones.size() == 1){
-//            System.out.println("Entra move.");
-            moveDrones(drones.get(0));
+    public void getProba(ArrayList<Drone> drones){
+        while(!drones.isEmpty()){
+            Random rand = new Random();
+            int random = rand.nextInt(drones.size());
+            Drone drone = drones.get(random);
+            moveDrones(drone);
+            drones.remove(random);
         }
     }
     
     public void getBacktraking(){
-        
-    }
-    
-    public void getProba(){
         
     }
     

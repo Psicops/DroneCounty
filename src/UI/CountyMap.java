@@ -1,6 +1,8 @@
 package UI;
 
 import Launcher.DroneCounty;
+import static UI.SetUp.ALGORITHM_TEST;
+import static UI.SetUp.FLIGHT_CONTROL;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
@@ -10,10 +12,48 @@ import java.util.Random;
  * @author †Psicops†
  */
 public class CountyMap extends javax.swing.JFrame {
+
+    class dronesThread extends Thread{
+        
+        @Override
+        public void run(){
+            ALGORITHM_TEST.addAll(FLIGHT_CONTROL.DRONES);
+            if(DroneCounty.SET_UP_PARAM[6].equals("Divide and Conquer")){
+                long start = System.nanoTime();
+                boolean done = SetUp.FLIGHT_CONTROL.divideConquer(ALGORITHM_TEST);
+                long finish = System.nanoTime();
+                System.out.println("Divide & Conquer lasted: " + (double)(finish - start)*1.0e-9+ " seconds.\nIs this ok? " + done);
+            }else if(DroneCounty.SET_UP_PARAM[6].equals("Backtracking")){
+                
+            }else{
+                long start = System.nanoTime();
+                boolean done = SetUp.FLIGHT_CONTROL.Probabilistic(ALGORITHM_TEST);
+                long finish = System.nanoTime();
+                System.out.println("Probabilistic lasted: " + (double)(finish - start)*1.0e-9+ " seconds.\nIs this ok? " + done);
+            }
+            long start1 = System.nanoTime();
+            SetUp.FLIGHT_CONTROL.startDrones();
+            long finish1 = System.nanoTime();
+            System.out.println("startDrones duró: " + (double)(finish1 - start1)*1.0e-9+ " segundos.");
+        }
+        
+    }
+    
+    class flightsThread extends Thread{
+        
+        @Override
+        public void run(){
+            while(true){
+                tfFlightsCompleted.setText(""+SetUp.FLIGHT_CONTROL.COMPLETED_FLIGHTS);
+                tfRemainingFlights.setText(""+SetUp.FLIGHT_CONTROL.REMAINING_FLIGHTS);
+            }
+        }
+    }
     
     public CountyMap() {
         initComponents();
         hideButtons();
+        bStart.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -50,6 +90,12 @@ public class CountyMap extends javax.swing.JFrame {
         NodePercent = new javax.swing.JButton();
         NodeAnd = new javax.swing.JButton();
         NodeDollar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        tfFlightsCompleted = new javax.swing.JTextField();
+        tfRemainingFlights = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         bStart = new javax.swing.JButton();
         Map = new javax.swing.JLabel();
 
@@ -65,7 +111,7 @@ public class CountyMap extends javax.swing.JFrame {
                 NodeAActionPerformed(evt);
             }
         });
-        getContentPane().add(NodeA, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, -1, 30));
+        getContentPane().add(NodeA, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, -1, 30));
 
         NodeB.setText("B");
         NodeB.addActionListener(new java.awt.event.ActionListener() {
@@ -299,6 +345,24 @@ public class CountyMap extends javax.swing.JFrame {
         });
         getContentPane().add(NodeDollar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 40, -1, 30));
 
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel1.setText("Flights Completed:");
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel2.setText("Remaining Flights:");
+
+        tfFlightsCompleted.setEnabled(false);
+
+        tfRemainingFlights.setEnabled(false);
+
+        jButton1.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
+        jButton1.setText("Show Arcs");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         bStart.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         bStart.setText("Start");
         bStart.addActionListener(new java.awt.event.ActionListener() {
@@ -306,7 +370,50 @@ public class CountyMap extends javax.swing.JFrame {
                 bStartActionPerformed(evt);
             }
         });
-        getContentPane().add(bStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(tfFlightsCompleted, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(tfRemainingFlights)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bStart, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(tfFlightsCompleted, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(tfRemainingFlights, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bStart, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 620, 220, 110));
 
         Map.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Map.jpg"))); // NOI18N
         Map.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -647,10 +754,19 @@ public class CountyMap extends javax.swing.JFrame {
     }
     
     private void bStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bStartActionPerformed
+        bStart.setEnabled(false);
+        Thread drones = new dronesThread();
+        Thread flights = new flightsThread();
+        flights.start();        
+        drones.start();
+    }//GEN-LAST:event_bStartActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         drawArcs();
+        bStart.setEnabled(true);
         //drawDrones();
         //moveDrones();
-    }//GEN-LAST:event_bStartActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -720,5 +836,11 @@ public class CountyMap extends javax.swing.JFrame {
     private javax.swing.JButton NodeY;
     private javax.swing.JButton NodeZ;
     private javax.swing.JButton bStart;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField tfFlightsCompleted;
+    private javax.swing.JTextField tfRemainingFlights;
     // End of variables declaration//GEN-END:variables
 }

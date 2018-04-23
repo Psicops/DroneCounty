@@ -16,6 +16,7 @@ public class SetUp extends javax.swing.JFrame {
     
     public static ArrayList<String> NODE_NAMES= new ArrayList<>();
     public static ArrayList<Drone> ALGORITHM_TEST = new ArrayList<>();
+    public static FlightControl FLIGHT_CONTROL;
     
     public SetUp() {
         NODE_NAMES.add("A");NODE_NAMES.add("B");NODE_NAMES.add("C");NODE_NAMES.add("D");NODE_NAMES.add("E");NODE_NAMES.add("F");NODE_NAMES.add("G");NODE_NAMES.add("H");NODE_NAMES.add("I");NODE_NAMES.add("J");
@@ -134,6 +135,11 @@ public class SetUp extends javax.swing.JFrame {
 
         cbAlgorithm.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         cbAlgorithm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Divide and Conquer", "Backtracking", "Probabilistic" }));
+        cbAlgorithm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbAlgorithmActionPerformed(evt);
+            }
+        });
 
         bReady.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
         bReady.setText("Ready");
@@ -329,24 +335,12 @@ public class SetUp extends javax.swing.JFrame {
         
         CountyMap map = new CountyMap();
         
-        FlightControl flightControl = new FlightControl(map);
-        flightControl.initiate();
+        FLIGHT_CONTROL = new FlightControl(map);
+        FLIGHT_CONTROL.initiate();
 
         DroneCounty.MY_GRAPH = new Graph(DroneCounty.SET_UP_PARAM[3]);
         
         DroneCounty.MY_GRAPH.startGraph();
-        
-        ALGORITHM_TEST = flightControl.DRONES;
-        
-        long start = System.nanoTime();
-        flightControl.getDC(ALGORITHM_TEST);
-        long finish = System.nanoTime();
-        System.out.println("DC duró: " + (double)(finish - start)*1.0e-9+ " segundos.");
-        
-        long start1 = System.nanoTime();
-        flightControl.startDrones();
-        long finish1 = System.nanoTime();
-        System.out.println("starDrones duró: " + (double)(finish1 - start1)*1.0e-9+ " segundos.");
         
         this.dispose();
     }//GEN-LAST:event_bReadyActionPerformed
@@ -392,6 +386,10 @@ public class SetUp extends javax.swing.JFrame {
         if(character <'0'|| character > '9')
             evt.consume();
     }//GEN-LAST:event_tfHourKeyTyped
+
+    private void cbAlgorithmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAlgorithmActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbAlgorithmActionPerformed
 
     /**
      * @param args the command line arguments
