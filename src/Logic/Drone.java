@@ -8,15 +8,16 @@ import java.util.ArrayList;
  */
 public class Drone {
     
-    public final int HEIGHT = 3;
-    public final int WIDTH = 2;
-    public final int LENGTH = 2;
     public String SOURCE = "";
     public String DEST = "";
+    public int FREE_SPACE;
+    public boolean FULL = false;
     public ArrayList<String> PATH = new ArrayList<>();
     
-    public Drone(){
-
+    public Drone(String height, String width){
+        int h = Integer.parseInt(height);
+        int w = Integer.parseInt(width) - 4;
+        FREE_SPACE = (int)((w/2)*(h/3));
     }
     
     public void setPath(String src, String dest){

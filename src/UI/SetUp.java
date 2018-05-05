@@ -5,23 +5,14 @@ package UI;
  * @author †Psicops†
  */
 
-import Launcher.DroneCounty;
-import Logic.Drone;
-import Logic.FlightControl;
-import Logic.Graph;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class SetUp extends javax.swing.JFrame {
     
-    public static ArrayList<String> NODE_NAMES= new ArrayList<>();
-    public static ArrayList<Drone> ALGORITHM_TEST = new ArrayList<>();
-    public static FlightControl FLIGHT_CONTROL;
+    public String SET_UP_PARAM[] = new String[8];
+    public boolean READY_PRESSED = false;
     
     public SetUp() {
-        NODE_NAMES.add("A");NODE_NAMES.add("B");NODE_NAMES.add("C");NODE_NAMES.add("D");NODE_NAMES.add("E");NODE_NAMES.add("F");NODE_NAMES.add("G");NODE_NAMES.add("H");NODE_NAMES.add("I");NODE_NAMES.add("J");
-        NODE_NAMES.add("K");NODE_NAMES.add("L");NODE_NAMES.add("M");NODE_NAMES.add("N");NODE_NAMES.add("O");NODE_NAMES.add("P");NODE_NAMES.add("Q");NODE_NAMES.add("R");NODE_NAMES.add("S");NODE_NAMES.add("T");
-        NODE_NAMES.add("U");NODE_NAMES.add("V");NODE_NAMES.add("W");NODE_NAMES.add("X");NODE_NAMES.add("Y");NODE_NAMES.add("Z");NODE_NAMES.add("#");NODE_NAMES.add("$");NODE_NAMES.add("%");NODE_NAMES.add("&");
         initComponents();
     }
 
@@ -273,78 +264,70 @@ public class SetUp extends javax.swing.JFrame {
 
     private void bReadyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bReadyActionPerformed
         if(tfNumberStations.getText().equals(""))
-            DroneCounty.SET_UP_PARAM[3] = "2";
+            SET_UP_PARAM[3] = "2";
         else if(Integer.parseInt(tfNumberStations.getText()) > 30){
             JOptionPane.showMessageDialog(null, "You can only choose a number of Stations from 2 to 30.\n30 stations selected.");
-            DroneCounty.SET_UP_PARAM[3] = "30";
+            SET_UP_PARAM[3] = "30";
         }else if(Integer.parseInt(tfNumberStations.getText()) < 2){
             JOptionPane.showMessageDialog(null, "You can only choose a number of Stations from 2 to 30.\n 2 stations selected.");
-            DroneCounty.SET_UP_PARAM[3] = "2";
+            SET_UP_PARAM[3] = "2";
         }else
-            DroneCounty.SET_UP_PARAM[3] = tfNumberStations.getText();
+            SET_UP_PARAM[3] = tfNumberStations.getText();
         if(tfNumberTracks.getText().equals(""))
-            DroneCounty.SET_UP_PARAM[0] = "1";
-        else if(Integer.parseInt(tfNumberTracks.getText()) > Integer.parseInt(DroneCounty.SET_UP_PARAM[3]) - 1){
+            SET_UP_PARAM[0] = "1";
+        else if(Integer.parseInt(tfNumberTracks.getText()) > Integer.parseInt(SET_UP_PARAM[3]) - 1){
             JOptionPane.showMessageDialog(null, "You can only choose a number of Tracks from 1 to "
-                    +(Integer.parseInt(DroneCounty.SET_UP_PARAM[3])-1)+".\n "
-                    +(Integer.parseInt(DroneCounty.SET_UP_PARAM[3])-1)+" tracks selected.");
-            DroneCounty.SET_UP_PARAM[0] = Integer.parseInt(DroneCounty.SET_UP_PARAM[3])-1 + "";
+                    +(Integer.parseInt(SET_UP_PARAM[3])-1)+".\n "
+                    +(Integer.parseInt(SET_UP_PARAM[3])-1)+" tracks selected.");
+            SET_UP_PARAM[0] = Integer.parseInt(SET_UP_PARAM[3])-1 + "";
         }else if(Integer.parseInt(tfNumberTracks.getText()) < 1){
             JOptionPane.showMessageDialog(null, "You can only choose a number of Tracks from 1 to "
-                    +(Integer.parseInt(DroneCounty.SET_UP_PARAM[3])-1)+".\n 1 track selected.");
-            DroneCounty.SET_UP_PARAM[0] = "1";
+                    +(Integer.parseInt(SET_UP_PARAM[3])-1)+".\n 1 track selected.");
+            SET_UP_PARAM[0] = "1";
         }else
-            DroneCounty.SET_UP_PARAM[0] = tfNumberTracks.getText();
+            SET_UP_PARAM[0] = tfNumberTracks.getText();
         if(tfWidth.getText().equals(""))
-            DroneCounty.SET_UP_PARAM[1] = "1000";
+            SET_UP_PARAM[1] = "1000";
         else if(Integer.parseInt(tfWidth.getText()) < 500){
             JOptionPane.showMessageDialog(null, "You can only choose a width between 500m and 1000m.\n 500m selected.");
-            DroneCounty.SET_UP_PARAM[1] = "500";
+            SET_UP_PARAM[1] = "500";
         }
         else if(Integer.parseInt(tfWidth.getText()) > 1000){
             JOptionPane.showMessageDialog(null, "You can only choose a width between 500m and 1000m.\n 1000m selected.");
-            DroneCounty.SET_UP_PARAM[1] = "1000";
+            SET_UP_PARAM[1] = "1000";
         }
         else
-            DroneCounty.SET_UP_PARAM[1] = tfWidth.getText();
+            SET_UP_PARAM[1] = tfWidth.getText();
         if(tfHeight.getText().equals(""))
-            DroneCounty.SET_UP_PARAM[2] = "1000";
+            SET_UP_PARAM[2] = "1000";
         else if(Integer.parseInt(tfHeight.getText()) < 500){
             JOptionPane.showMessageDialog(null, "You can only choose a height between 500m and 1000m.\n 500m selected.");
-            DroneCounty.SET_UP_PARAM[2] = "500";
+            SET_UP_PARAM[2] = "500";
         }
         else if(Integer.parseInt(tfHeight.getText()) > 1000){
             JOptionPane.showMessageDialog(null, "You can only choose a height between 500m and 1000m.\n 1000m selected.");
-            DroneCounty.SET_UP_PARAM[2] = "1000";
+            SET_UP_PARAM[2] = "1000";
         }
         else
-            DroneCounty.SET_UP_PARAM[2] = tfHeight.getText();
+            SET_UP_PARAM[2] = tfHeight.getText();
         if(tfNumberTravels.getText().equals(""))
-            DroneCounty.SET_UP_PARAM[4] = "100";
+            SET_UP_PARAM[4] = "100";
         else
-            DroneCounty.SET_UP_PARAM[4] = tfNumberTravels.getText();
+            SET_UP_PARAM[4] = tfNumberTravels.getText();
         if(tfTime.getText().equals(""))
-            DroneCounty.SET_UP_PARAM[5] = "10";
+            SET_UP_PARAM[5] = "10";
         else
-            DroneCounty.SET_UP_PARAM[5] = tfTime.getText();
-        DroneCounty.SET_UP_PARAM[6] = cbAlgorithm.getSelectedItem().toString();
+            SET_UP_PARAM[5] = tfTime.getText();
+        SET_UP_PARAM[6] = cbAlgorithm.getSelectedItem().toString();
         if(tfHour.getText().equals("") || Integer.parseInt(tfHour.getText()) < 1)
-            DroneCounty.SET_UP_PARAM[7] = "1";
+            SET_UP_PARAM[7] = "1";
         else
-            DroneCounty.SET_UP_PARAM[7] = tfHour.getText();
+            SET_UP_PARAM[7] = tfHour.getText();
         
-        CountyMap map = new CountyMap();
-        
-        FLIGHT_CONTROL = new FlightControl(map);
-        FLIGHT_CONTROL.initiate();
-
-        DroneCounty.MY_GRAPH = new Graph(DroneCounty.SET_UP_PARAM[3]);
-        
-        DroneCounty.MY_GRAPH.startGraph();
-        
+        READY_PRESSED = true;
         this.dispose();
     }//GEN-LAST:event_bReadyActionPerformed
-
+    
     private void tfNumberTracksKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNumberTracksKeyTyped
         char character = evt.getKeyChar();
         if(character <'0'|| character > '9')

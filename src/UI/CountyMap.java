@@ -1,10 +1,10 @@
 package UI;
 
-import Launcher.DroneCounty;
-import static UI.SetUp.ALGORITHM_TEST;
-import static UI.SetUp.FLIGHT_CONTROL;
+import Logic.Drone;
+import Logic.FlightControl;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -13,28 +13,33 @@ import java.util.Random;
  */
 public class CountyMap extends javax.swing.JFrame {
 
+    public ArrayList<String> GRAPH_NODES = new ArrayList<>();
+    public FlightControl FLIGHT_CONTROL;
+    public String SET_UP_PARAM[] = new String[8];
+    public ArrayList<Drone> ALGORITHM_TEST = new ArrayList<>();
+    
     class dronesThread extends Thread{
         
         @Override
         public void run(){
             ALGORITHM_TEST.addAll(FLIGHT_CONTROL.DRONES);
-            if(DroneCounty.SET_UP_PARAM[6].equals("Divide and Conquer")){
+            if(SET_UP_PARAM[6].equals("Divide and Conquer")){
                 long start = System.nanoTime();
-                boolean done = SetUp.FLIGHT_CONTROL.divideConquer(ALGORITHM_TEST);
+                boolean done = FLIGHT_CONTROL.divideConquer(ALGORITHM_TEST);
                 long finish = System.nanoTime();
-                System.out.println("Divide & Conquer lasted: " + (double)(finish - start)*1.0e-9+ " seconds.\nIs this ok? " + done);
-            }else if(DroneCounty.SET_UP_PARAM[6].equals("Backtracking")){
+                //System.out.println("Divide & Conquer lasted: " + (double)(finish - start)*1.0e-9+ " seconds.\nIs this ok? " + done);
+            }else if(SET_UP_PARAM[6].equals("Backtracking")){
                 
             }else{
                 long start = System.nanoTime();
-                boolean done = SetUp.FLIGHT_CONTROL.Probabilistic(ALGORITHM_TEST);
+                boolean done = FLIGHT_CONTROL.Probabilistic(ALGORITHM_TEST);
                 long finish = System.nanoTime();
-                System.out.println("Probabilistic lasted: " + (double)(finish - start)*1.0e-9+ " seconds.\nIs this ok? " + done);
+                //System.out.println("Probabilistic lasted: " + (double)(finish - start)*1.0e-9+ " seconds.\nIs this ok? " + done);
             }
             long start1 = System.nanoTime();
-            SetUp.FLIGHT_CONTROL.startDrones();
+            FLIGHT_CONTROL.startDrones();
             long finish1 = System.nanoTime();
-            System.out.println("startDrones duró: " + (double)(finish1 - start1)*1.0e-9+ " segundos.");
+            //System.out.println("startDrones duró: " + (double)(finish1 - start1)*1.0e-9+ " segundos.");
         }
         
     }
@@ -44,8 +49,8 @@ public class CountyMap extends javax.swing.JFrame {
         @Override
         public void run(){
             while(true){
-                tfFlightsCompleted.setText(""+SetUp.FLIGHT_CONTROL.COMPLETED_FLIGHTS);
-                tfRemainingFlights.setText(""+SetUp.FLIGHT_CONTROL.REMAINING_FLIGHTS);
+                tfFlightsCompleted.setText(""+FLIGHT_CONTROL.COMPLETED_FLIGHTS);
+                tfRemainingFlights.setText(""+FLIGHT_CONTROL.REMAINING_FLIGHTS);
             }
         }
     }
@@ -56,6 +61,12 @@ public class CountyMap extends javax.swing.JFrame {
         bStart.setEnabled(false);
     }
 
+    public void initiate(ArrayList<String> graphNodes, String parameters[], FlightControl fC){
+        SET_UP_PARAM = parameters;
+        GRAPH_NODES = graphNodes;
+        FLIGHT_CONTROL = fC;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -551,10 +562,10 @@ public class CountyMap extends javax.swing.JFrame {
     
     private void drawArcs(){
         Graphics graphics = this.getGraphics();
-        for(int arcs = 0; arcs < DroneCounty.GRAPH_NODES.size(); arcs++){
+        for(int arcs = 0; arcs < GRAPH_NODES.size(); arcs++){
             Color randomColor = generateColor();
-            int sourceNode[] = getPos(""+DroneCounty.GRAPH_NODES.get(arcs).charAt(0));
-            int destNode[] = getPos(""+DroneCounty.GRAPH_NODES.get(arcs).charAt(1));
+            int sourceNode[] = getPos(""+GRAPH_NODES.get(arcs).charAt(0));
+            int destNode[] = getPos(""+GRAPH_NODES.get(arcs).charAt(1));
             graphics.setPaintMode();
             graphics.setColor(randomColor);
             graphics.drawLine(sourceNode[0]+25, sourceNode[1]+45, destNode[0]+25, destNode[1]+50);
@@ -591,7 +602,7 @@ public class CountyMap extends javax.swing.JFrame {
     }
     
     public void showButtons(){
-        for(String node : DroneCounty.GRAPH_NODES){
+        for(String node : GRAPH_NODES){
             node = "" + node.charAt(0);
             if(NodeA.getText().equals(node)){
                 NodeA.setVisible(true);

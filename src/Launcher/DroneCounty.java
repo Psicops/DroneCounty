@@ -5,15 +5,10 @@ package Launcher;
  * @author †Psicops†
  */
 
-import Logic.Graph;
+import Controler.Controler;
 import UI.SetUp;
-import java.util.ArrayList;
 
 public class DroneCounty {
-
-    public static String SET_UP_PARAM[] = new String[8];
-    public static ArrayList<String> GRAPH_NODES = new ArrayList<String>(); //GRAPH_NODES.add("AB55");
-    public static Graph MY_GRAPH;
     
     public static void main(String[] args) {
         
@@ -40,8 +35,8 @@ public class DroneCounty {
         }
         //</editor-fold>
         
-        SetUp setup = new SetUp();
-        setup.show();
+        Controler control = new Controler();
+        control.start();
 
     }
     

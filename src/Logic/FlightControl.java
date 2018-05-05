@@ -1,8 +1,7 @@
 package Logic;
 
-import Launcher.DroneCounty;
 import UI.CountyMap;
-import UI.SetUp;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JOptionPane;
@@ -13,43 +12,47 @@ import javax.swing.JOptionPane;
  */
 public class FlightControl {
     
+    public ArrayList<String> NODE_NAMES= new ArrayList<>();
+    public String SET_UP_PARAM[] = new String[8];
+    public Graph GRAPH;
+    public ArrayList<String> GRAPH_NODES = new ArrayList<>();
     public CountyMap UI_MAP;
-    public static String[] SELECTED_NODES = new String[Integer.parseInt(DroneCounty.SET_UP_PARAM[3])];
+    public static String[] SELECTED_NODES;
     public int FLIGHT_SECOND = 0;
     public static ArrayList<Drone> DRONES = new ArrayList<>();
     public int COMPLETED_FLIGHTS;
     public int REMAINING_FLIGHTS;
+    public int CANT_DRONES;
+    public int DRONES_DONE = 0;
     
-    
-    public FlightControl(CountyMap map){
-        this.UI_MAP = map;
+    public FlightControl(){
+        NODE_NAMES.add("A");NODE_NAMES.add("B");NODE_NAMES.add("C");NODE_NAMES.add("D");NODE_NAMES.add("E");NODE_NAMES.add("F");NODE_NAMES.add("G");NODE_NAMES.add("H");NODE_NAMES.add("I");NODE_NAMES.add("J");
+        NODE_NAMES.add("K");NODE_NAMES.add("L");NODE_NAMES.add("M");NODE_NAMES.add("N");NODE_NAMES.add("O");NODE_NAMES.add("P");NODE_NAMES.add("Q");NODE_NAMES.add("R");NODE_NAMES.add("S");NODE_NAMES.add("T");
+        NODE_NAMES.add("U");NODE_NAMES.add("V");NODE_NAMES.add("W");NODE_NAMES.add("X");NODE_NAMES.add("Y");NODE_NAMES.add("Z");NODE_NAMES.add("#");NODE_NAMES.add("$");NODE_NAMES.add("%");NODE_NAMES.add("&");
     }
 
-    public void initiate(){
+    public void initiate(CountyMap map){
+        UI_MAP = map;
         UI_MAP.show();
-        fillSelecNodes();
-        createGraph();
         COMPLETED_FLIGHTS = 0;
-        REMAINING_FLIGHTS = Integer.parseInt(DroneCounty.SET_UP_PARAM[4]);
+        REMAINING_FLIGHTS = Integer.parseInt(SET_UP_PARAM[4]);
+        CANT_DRONES = (int)(((Integer.parseInt(SET_UP_PARAM[1])-4)/2)*(Integer.parseInt(SET_UP_PARAM[2])/3));
     }
     
-    private void createGraph(){
-        int nodes = Integer.parseInt(DroneCounty.SET_UP_PARAM[3]);
-        int tracks = Integer.parseInt(DroneCounty.SET_UP_PARAM[0]);
+    public void createGraph(ArrayList<String> graphNodes, Graph graph, String parameters[]){
+        SET_UP_PARAM = parameters;
+        GRAPH = graph;
+        GRAPH_NODES = graphNodes;
+        SELECTED_NODES = new String[Integer.parseInt(SET_UP_PARAM[3])];
+        fillSelecNodes();
+        int nodes = Integer.parseInt(SET_UP_PARAM[3]);
         for(int nodeNum = 0; nodeNum < nodes; nodeNum++){
             int rand = (int) (Math.random() * 30);
-            if(!checkNodes(SetUp.NODE_NAMES.get(rand))){
-                SELECTED_NODES[nodeNum] = SetUp.NODE_NAMES.get(rand);
+            if(!checkNodes(NODE_NAMES.get(rand))){
+                SELECTED_NODES[nodeNum] = NODE_NAMES.get(rand);
             }else
                 nodeNum--;
         }
-        for(String node : SELECTED_NODES){
-            for(int trackNum = 0; trackNum < tracks; trackNum++){
-                DroneCounty.GRAPH_NODES.add(node + getCloser(node));
-            }
-        }
-        getFlightsNumber();
-        this.UI_MAP.showButtons();
 //        System.out.println("Graph Nodes");
 //        for(String i : DroneCounty.GRAPH_NODES)
 //            System.out.println(i);
@@ -58,13 +61,24 @@ public class FlightControl {
 //            System.out.println(i);
     }
     
+    public void fillNodes(){
+        int tracks = Integer.parseInt(SET_UP_PARAM[0]);
+        for(String node : SELECTED_NODES){
+            for(int trackNum = 0; trackNum < tracks; trackNum++){
+                GRAPH_NODES.add(node + getCloser(node));
+            }
+        }
+        getFlightsNumber();
+        this.UI_MAP.showButtons();
+    }
+    
     public void getFlightsNumber(){
-        int flightsNumber = Integer.parseInt(DroneCounty.SET_UP_PARAM[4]);
-        int time = Integer.parseInt(DroneCounty.SET_UP_PARAM[5]);
+        int flightsNumber = Integer.parseInt(SET_UP_PARAM[4]);
+        int time = Integer.parseInt(SET_UP_PARAM[5]);
         FLIGHT_SECOND = (int)flightsNumber/time;
     }
     
-    private void fillSelecNodes(){
+    public void fillSelecNodes(){
         for(int fill = 0; fill < SELECTED_NODES.length; fill++)
             SELECTED_NODES[fill] = "-";
     }
@@ -89,8 +103,8 @@ public class FlightControl {
     }
     
     private boolean checkIn(String node){
-        for(int checker = 0; checker < DroneCounty.GRAPH_NODES.size(); checker++){
-            String path = DroneCounty.GRAPH_NODES.get(checker);
+        for(int checker = 0; checker < GRAPH_NODES.size(); checker++){
+            String path = GRAPH_NODES.get(checker);
             if(path.charAt(0) == node.charAt(0) && path.charAt(1) == node.charAt(1)){
                 return true;
             }
@@ -111,34 +125,52 @@ public class FlightControl {
         try{
             while(!DRONES.isEmpty()){
                 long start = System.currentTimeMillis();
-                int dronesDone = 0;
-                while(System.currentTimeMillis() - start <= 1000 && dronesDone < FLIGHT_SECOND){
+                DRONES_DONE = 0;
+                while(System.currentTimeMillis() - start <= 1000 && DRONES_DONE < FLIGHT_SECOND){
                     Drone drone = DRONES.get(0);
                     moveDrones(drone);
-                    COMPLETED_FLIGHTS++;
-                    REMAINING_FLIGHTS = DRONES.size() - 1;
+                    updateFlights();
                     DRONES.remove(0);
-                    dronesDone++;
                     if(DRONES.isEmpty())
                         break;
-                    if(dronesDone == FLIGHT_SECOND){
+                    if(DRONES_DONE == FLIGHT_SECOND){
                         Thread.sleep(1000 - (System.currentTimeMillis() - start));
                     }
                 }
-                System.out.println("Must be: " + FLIGHT_SECOND + " flights/s. -> Done: " + dronesDone + " flights/s.");
+                //System.out.println("Must be: " + FLIGHT_SECOND + " flights/s. -> Done: " + DRONES_DONE + " flights/s.");
             }
         }catch(Exception E){
             JOptionPane.showMessageDialog(null, "Can't do " + FLIGHT_SECOND + " flights/s.\n");
         }
     }
     
+    public void updateFlights(){
+        int remain = 0;
+        for(Drone drones : DRONES){
+            System.out.println("");
+            remain += abs(CANT_DRONES - drones.FREE_SPACE);
+            System.out.println("");
+        }
+        REMAINING_FLIGHTS = remain;
+        COMPLETED_FLIGHTS = abs(Integer.parseInt(SET_UP_PARAM[4]) - remain);
+    }
+    
     public void moveDrones(Drone drone){
         if(!drone.SOURCE.equals(drone.DEST)){
             if(drone.PATH.size() > 1){
-                drone.setPath(drone.PATH.get(1), drone.PATH.get(drone.PATH.size()-1));
-                drone.PATH.remove(0);
-                if(!drone.SOURCE.equals(drone.DEST))
-                    moveDrones(drone);
+                if(abs((CANT_DRONES - drone.FREE_SPACE) + DRONES_DONE) <= FLIGHT_SECOND){
+                    drone.setPath(drone.PATH.get(1), drone.PATH.get(drone.PATH.size()-1));
+                    DRONES_DONE += abs((CANT_DRONES - drone.FREE_SPACE));
+                    drone.PATH.remove(0);
+                    if(!drone.SOURCE.equals(drone.DEST))
+                        moveDrones(drone);
+                }else{
+                    drone.FREE_SPACE += abs((FLIGHT_SECOND - DRONES_DONE));
+                    drone.setPath(drone.PATH.get(1), drone.PATH.get(drone.PATH.size()-1));
+                    DRONES_DONE += abs((CANT_DRONES - drone.FREE_SPACE));
+                    if(!drone.SOURCE.equals(drone.DEST))
+                        moveDrones(drone);
+                }
             }
         }
     }

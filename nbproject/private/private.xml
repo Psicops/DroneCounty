@@ -5,7 +5,8 @@
         <group>
             <file>file:/C:/Users/†Kenneth/Documents/NetBeansProjects/Drone%20County/src/UI/CountyMap.java</file>
             <file>file:/C:/Users/†Kenneth/Documents/NetBeansProjects/Drone%20County/src/Logic/FlightControl.java</file>
-            <file>file:/C:/Users/†Kenneth/Documents/NetBeansProjects/Drone%20County/src/Launcher/DroneCounty.java</file>
+            <file>file:/C:/Users/†Kenneth/Documents/NetBeansProjects/Drone%20County/src/Controler/Controler.java</file>
+            <file>file:/C:/Users/†Kenneth/Documents/NetBeansProjects/Drone%20County/src/Logic/Graph.java</file>
             <file>file:/C:/Users/†Kenneth/Documents/NetBeansProjects/Drone%20County/src/UI/SetUp.java</file>
         </group>
     </open-files>

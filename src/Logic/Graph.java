@@ -5,15 +5,16 @@ package Logic;
  * @author †Psicops†
  */
 
-import Launcher.DroneCounty;
 import static Logic.FlightControl.SELECTED_NODES;
 import java.util.*;
 import javax.swing.JOptionPane;
-import Logic.FlightControl;
 
 public class Graph {
     
     public ArrayList<Vertex> VERTICES;
+    public String SET_UP_PARAM[] = new String[8];
+    public Graph GRAPH;
+    public ArrayList<String> GRAPH_NODES = new ArrayList<>();
     
     public Graph(String vertexNumber){
         VERTICES = new ArrayList<Vertex>(Integer.parseInt(vertexNumber));
@@ -29,14 +30,17 @@ public class Graph {
 //        }
 //    }
     
-    public void startGraph(){
-        for (String node : DroneCounty.GRAPH_NODES) {
+    public void startGraph(ArrayList<String> graphNodes, Graph graph, String parameters[]){
+        SET_UP_PARAM = parameters;
+        GRAPH = graph;
+        GRAPH_NODES = graphNodes;
+        for (String node : GRAPH_NODES) {
             int source = getNodePosition("" + node.charAt(0));
             int dest  = getNodePosition("" + node.charAt(1));
             int weight = Integer.parseInt(node.substring(2));
-            DroneCounty.MY_GRAPH.addEdge(source, dest, weight);
+            GRAPH.addEdge(source, dest, weight);
         }
-        insertDrones(DroneCounty.SET_UP_PARAM[4]);
+        insertDrones(SET_UP_PARAM[4]);
     }
     
     public int getNodePosition(String node){
@@ -51,7 +55,7 @@ public class Graph {
         Vertex newVertex = VERTICES.get(pSource);
         Edge newEdge = new Edge(VERTICES.get(pDest),pWeight);
         newVertex.TRACK.add(new Tracks(VERTICES.get(pSource).NAME,VERTICES.get(pDest).NAME,
-                DroneCounty.SET_UP_PARAM[1],DroneCounty.SET_UP_PARAM[2]));
+                SET_UP_PARAM[1],SET_UP_PARAM[2]));
         newVertex.NEIGHBOURS.add(newEdge);
     }
 	
@@ -65,20 +69,28 @@ public class Graph {
     
     public void insertDrones(String number){
         for(int drones = 0; drones < Integer.parseInt(number); drones++){
-            Drone newDrone = new Drone();
             String path = getRandomNodes();
-            insertTrack(newDrone, path);
-            FlightControl.DRONES.add(newDrone);
+            insertTrack(path);
         }
+//        for(Vertex vertex : GRAPH.VERTICES){
+//            for(Tracks track : vertex.TRACK){
+//                for(Drone drone : track.DRONES){
+//                    int h = Integer.parseInt(SET_UP_PARAM[2]);
+//                    int w = Integer.parseInt(SET_UP_PARAM[1]) - 4;
+//                    System.out.println("Sauce: " + track.SOURCE + " Dest: " + track.DEST +
+//                            " Cant = " + ((int)((w/2)*(h/3)) - drone.NUMBER_OF_DRONES));
+//                }
+//            }
+//        }
     }
     
     public String getRandomNodes(){
         while(true){
             Random rand = new Random();
-            String src = SELECTED_NODES[rand.nextInt(Integer.parseInt(DroneCounty.SET_UP_PARAM[3]))];
+            String src = SELECTED_NODES[rand.nextInt(Integer.parseInt(SET_UP_PARAM[3]))];
             String dest = "";
             while(true){
-                String newNode = SELECTED_NODES[rand.nextInt(Integer.parseInt(DroneCounty.SET_UP_PARAM[3]))];
+                String newNode = SELECTED_NODES[rand.nextInt(Integer.parseInt(SET_UP_PARAM[3]))];
                 if(!newNode.equals(src)){
                     dest = newNode;
                     break;
@@ -91,7 +103,7 @@ public class Graph {
     }
     
     public boolean checkPath(String path){
-        for(String checker : DroneCounty.GRAPH_NODES){
+        for(String checker : GRAPH_NODES){
             if(path.charAt(0) == checker.charAt(0) && path.charAt(1) == checker.charAt(1)){
                return true; 
             }
@@ -99,30 +111,59 @@ public class Graph {
         return false;
     }
     
-    public void insertTrack(Drone newDrone, String path){
-        for(Vertex vertex : DroneCounty.MY_GRAPH.VERTICES){
+    public void insertTrack(String path){
+        for(Vertex vertex : GRAPH.VERTICES){
             for(Tracks track : vertex.TRACK){
                 if(track.SOURCE.equals("" + path.charAt(0)) && track.DEST.equals("" + path.charAt(1))){
-                    newDrone.setPath("" + path.charAt(0), "" + path.charAt(1));
-                    getDronePath(newDrone);
-                    addDrone(track, newDrone);
+                    if(track.DRONES.isEmpty()){
+                        Drone newDrone = new Drone(SET_UP_PARAM[2],SET_UP_PARAM[1]); // (alto, ancho)
+                        //newDrone.setPath("" + path.charAt(0), "" + path.charAt(1));
+                        getDronePath(newDrone, "" + path.charAt(0), "" + path.charAt(1));
+                        newDrone.FREE_SPACE--;
+                        track.DRONES.add(newDrone);
+                        FlightControl.DRONES.add(newDrone);
+                    }else{
+                        boolean allFull = false;
+                        int save = 0;
+                        for(int i = 0; i < track.DRONES.size(); i++){
+                            Drone drone = track.DRONES.get(i);
+                            if(drone.FULL){
+                                save++;
+                            }if(save == track.DRONES.size()){
+                                allFull = true;
+                            }   
+                        }
+                        if(allFull){
+                            Drone newDrone = new Drone(SET_UP_PARAM[2],SET_UP_PARAM[1]);
+                            //newDrone.setPath("" + path.charAt(0), "" + path.charAt(1));
+                            getDronePath(newDrone, "" + path.charAt(0), "" + path.charAt(1));
+                            newDrone.FREE_SPACE--;
+                            track.DRONES.add(newDrone);
+                            FlightControl.DRONES.add(newDrone);
+                        }else{
+                            track.DRONES.get(save).FREE_SPACE--;
+                            if(track.DRONES.get(save).FREE_SPACE == 0){
+                                track.DRONES.get(save).FULL = true;
+                            }
+                        }
+                    }
                 }
             }
         }
     }
     
-    public void addDrone(Tracks track, Drone drone){
-        if(track.WIDTH > drone.WIDTH){
-            track.DRONES.add(drone);
-            track.WIDTH -= drone.WIDTH;
-        }else if(track.HEIGHT > drone.HEIGHT){
-            track.DRONES.add(drone);
-            track.HEIGHT -= drone.HEIGHT;
-            track.WIDTH = Integer.parseInt(DroneCounty.SET_UP_PARAM[1]);
-        }else{//Hay que meter los drones en una lista de espera o algo así.
-            JOptionPane.showMessageDialog(null, "No room for more drones in this track.");
-        }
-    }
+//    public void addDrone(Tracks track, Drone drone){
+//        if(track.WIDTH > 2){
+//            track.DRONES.add(drone);
+//            track.WIDTH -= 2;
+//        }else if(track.HEIGHT > 3){
+//            track.DRONES.add(drone);
+//            track.HEIGHT -= 3;
+//            track.WIDTH = Integer.parseInt(SET_UP_PARAM[1]);
+//        }else{//Hay que meter los drones en una lista de espera o algo así.
+//            JOptionPane.showMessageDialog(null, "No room for more drones in this track.");
+//        }
+//    }
     
     public void calculateDijkstra(Vertex pSource){
         pSource.MIN_DISTANCE = 0;
@@ -143,8 +184,8 @@ public class Graph {
         }
     }
     
-    public void getDronePath(Drone drone){
-        ArrayList<String> path = getShortestPath(drone.SOURCE, drone.DEST);
+    public void getDronePath(Drone drone, String source, String dest){
+        ArrayList<String> path = getShortestPath(source, dest);
         for(String traveler : path){
             drone.PATH.add(traveler);
         }
@@ -180,7 +221,7 @@ public class Graph {
     }
     
     public void printDroneSize(){
-        for(Vertex vertex : DroneCounty.MY_GRAPH.VERTICES){
+        for(Vertex vertex : GRAPH.VERTICES){
             for(Tracks track : vertex.TRACK){
                 System.out.println(track.DRONES.size() + "+");
             }
